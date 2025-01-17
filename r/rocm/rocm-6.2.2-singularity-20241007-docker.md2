@@ -1,0 +1,24 @@
+---
+title:  for rocm/5.5.3-singularity-20240207 - rocm
+search:
+  exclude: true
+hide:
+- navigation
+- toc
+---
+
+[[rocm]](index.md) [[package list]](../../index.md)
+
+#  for rocm/5.5.3-singularity-20240207 (rocm-5.5.3-singularity-20240207.eb)
+
+Docker definition file ``
+for the container provided by the module `rocm/5.5.3-singularity-20240207`.
+
+Docker file:
+
+
+``` docker
+
+```
+
+[[rocm]](index.md) [[package list]](../../index.md)

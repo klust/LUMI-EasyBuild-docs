@@ -1,0 +1,24 @@
+---
+title:  for PyTorch/2.0.1-rocm-5.5.1-python-3.10-singularity-20240207 - PyTorch
+search:
+  exclude: true
+hide:
+- navigation
+- toc
+---
+
+[[PyTorch]](index.md) [[package list]](../../index.md)
+
+#  for PyTorch/2.0.1-rocm-5.5.1-python-3.10-singularity-20240207 (PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20240207.eb)
+
+Docker definition file ``
+for the container provided by the module `PyTorch/2.0.1-rocm-5.5.1-python-3.10-singularity-20240207`.
+
+Docker file:
+
+
+``` docker
+
+```
+
+[[PyTorch]](index.md) [[package list]](../../index.md)

@@ -1394,6 +1394,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#user-installable-modules-and-easyconfigs" class="md-nav__link">
+    <span class="md-ellipsis">
+      User-installable modules (and EasyConfigs)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#archived-easyconfigs" class="md-nav__link">
     <span class="md-ellipsis">
       Archived EasyConfigs
@@ -1419,11 +1428,20 @@
 
 <p><a href="../../">[package list]</a></p>
 <h1 id="hipsycl">hipSYCL</h1>
-<p><span class='lumi-software-button-archivedapp-hover'><span class='lumi-software-button-archivedapp'></span></span></p>
+<p><span class='lumi-software-button-userinstallable-hover'><span class='lumi-software-button-userinstallable'></span></span></p>
+<h2 id="user-installable-modules-and-easyconfigs">User-installable modules (and EasyConfigs)</h2>
+<p>Install with the EasyBuild-user module:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>eb &lt;easyconfig&gt; -r
+</code></pre></div>
+To access module help after installation and get reminded for which stacks and partitions the module is
+installed, use <code>module spider hipSYCL/&lt;version&gt;</code>.</p>
+<p>EasyConfig:</p>
 <h2 id="archived-easyconfigs">Archived EasyConfigs</h2>
-<p>The EasyConfigs below are not directly available on the system for installation.
-They are however still a useful source of information if you want to port the
-the install recip to the currently available environments on LUMI.</p>
+<p>The EasyConfigs below are additonal easyconfigs that are not directly available
+on the system for installation. Users are advised to use the newer ones and these
+archived ones are unsupported. They are still provided as a source of information
+should you need this, e.g., to understand the configuration that was used for
+earlier work on the system.</p>
 <ul>
 <li>
 <p>Archived EasyConfigs from <a href="https://github.com/lumi-supercomputer/LUMI-EasyBuild-contrib/blob/main/easybuild/easyconfigs/__archive__/h/hipSYCL">LUMI-EasyBuild-contrib</a> - previously user-installable software</p>

@@ -1515,13 +1515,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#alternative-direct-access" class="md-nav__link">
+  <a href="#alternative-direct-access-without-the-easybuild-generated-pytorch-module" class="md-nav__link">
     <span class="md-ellipsis">
-      Alternative: Direct access
+      Alternative: Direct access (without the EasyBuild-generated PyTorch module)
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Alternative: Direct access">
+    <nav class="md-nav" aria-label="Alternative: Direct access (without the EasyBuild-generated PyTorch module)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1548,9 +1548,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#known-restrictions-and-problems" class="md-nav__link">
+  <a href="#links" class="md-nav__link">
     <span class="md-ellipsis">
-      Known restrictions and problems
+      Links
     </span>
   </a>
   
@@ -1689,7 +1689,7 @@ two possible ways:</p>
 <p><a href="./#module-and-wrapper-scripts">Through modules and wrapper scripts generated via EasyBuild</a></p>
 </li>
 <li>
-<p><a href="./#alternative-direct-access">Directly, with you taking care of all bindings and all necessary environment
+<p><a href="./#alternative-direct-access-without-the-easybuild-generated-pytorch-module">Directly, with you taking care of all bindings and all necessary environment
     variables.</a></p>
 <p>These instructions will likely also work for the 
 <a href="../../r/rocm/#using-the-images-as-base-image-for-cotainr">containers built on top of the ROCm containers with cotainr</a>.</p>
@@ -1715,7 +1715,7 @@ network drivers on LUMI, the RCCL plugin for the LUMI Slingshot interconnect may
 but if you run on only one node PyTorch may still work for you.</p>
 <p>If you prefer to use the centrally provided container, you can remove your copy 
 after loading of the module with <code>rm $SIF</code> followed by reloading the module. This
-is however at your own risk. </p>
+is at your own risk however. </p>
 </li>
 <li>
 <p>It will create a module file. 
@@ -1728,7 +1728,7 @@ is however at your own risk. </p>
     container file.</p>
 </li>
 <li>
-<p><code>SINGULARITY_BINDPATH</code> will mount all necessary directories from the system,
+<p><code>SINGULARITY_BIND</code> will mount all necessary directories from the system,
     including everything that is needed to access the project, scratch and flash
     file systems.</p>
 </li>
@@ -1802,7 +1802,14 @@ environment <code>pytorch</code>. Inside the container, the virtual environment 
 <code>/user-software/venv</code> while outside the container the files can be found in 
 <code>$CONTAINERROOT/user-software/venv</code> (if this directory has not been removed after creating
 a SquashFS file from it for better file system performance). You can also use the 
-<code>/user-software</code> subdirectory in the container to install other software through other methods.</p>
+<code>/user-software</code> subdirectory in the container to install other software through other methods.
+In these containers it is also very easy to check which Python packages are installed 
+with</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>singularity exec $SIF pip list
+</code></pre></div>
+<p>or if the <code>start-shell</code> script is available (which is the case for most of these containers),</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>start-shell -c &#39;pip list&#39;
+</code></pre></div>
 <h3 id="examples-with-the-wrapper-scripts">Examples with the wrapper scripts</h3>
 <p>Note: In the examples below you may need to replace the <code>standard-g</code> queue with a <a href="https://docs.lumi-supercomputer.eu/runjobs/scheduled-jobs/partitions/#slurm-partitions-allocatable-by-node">different
 slurm partition allocatable per node</a>
@@ -1814,34 +1821,34 @@ if your user category has no access to <code>standard-g</code>. </p>
 The example can be run in an interactive session and works even on the login nodes.</p>
 <p>In these containers, the Python packages
 can be listed using the following steps: First execute, e.g., </p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240209
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>singularity shell $SIF
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240209
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>singularity shell $SIF
 </code></pre></div>
 <p>which takes you in the container, and then in the container, at the <code>Singularity&gt;</code> 
 prompt:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$WITH_CONDA
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip list
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$WITH_CONDA
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pip list
 </code></pre></div>
 <p>The same can be done without opening an interactive session in the container with</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240209
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240209
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list&#39;
 </code></pre></div>
-<p>Notice the use of single quotes as with double quotes <code>$WITH_CONDA</code> would be expanded
+<p>Notice the use of single quotes as with double quotes, <code>$WITH_CONDA</code> would be expanded
 by the shell before executing the singularity command, and at that time <code>WITH_CONDA</code> is
 not yet defined. To use the container it also doesn't matter which version of the 
 LUMI module is loaded, and in fact, loading CrayEnv would work as well.</p>
 <h5 id="containers-from-20240315-on">Containers from 20240315 on</h5>
 <p>For the containers from version 20240315 on, the <code>$WITH_CONDA</code> is no longer needed.
 In an interactive session, you still need to load the module and go into the container:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240315
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>singularity shell $SIF
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>module load LUMI PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>singularity shell $SIF
 </code></pre></div>
 <p>but once in the container, at the <code>Singularity&gt;</code> prompt, all that is needed is</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip list
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pip list
 </code></pre></div>
 <p>Without an interactive session in the container, all that is now needed is</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240315
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>singularity exec $SIF pip list
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>module load LUMI PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>singularity exec $SIF pip list
 </code></pre></div>
 <p>as the <code>pip</code> command is already in the search path.</p>
 <h4 id="executing-python-code-in-the-container-single-task">Executing Python code in the container (single task)</h4>
@@ -1850,11 +1857,11 @@ In an interactive session, you still need to load the module and go into the con
 in the container, takes care of initialising the Conda environment and then passes its
 arguments to the <code>python</code> command. E.g., the example below will import the <code>torch</code>
 package in Python and then show the number of GPUs available to it:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>salloc -N1 -pstandard-g -t 30:00
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>module load LUMI PyTorch/2.1.0-rocm-5.6.1-python-3.10-singularity-20240209
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>srun -N1 -n1 --gpus 8 singularity exec $SIF conda-python-simple \
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    -c &#39;import torch; print(&quot;I have this many devices:&quot;, torch.cuda.device_count())&#39;
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>exit
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>salloc -N1 -pstandard-g -t 10:00
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240209
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>srun -N1 -n1 --gpus 8 singularity exec $SIF conda-python-simple \
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    -c &#39;import torch; print(&quot;I have this many devices:&quot;, torch.cuda.device_count())&#39;
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>exit
 </code></pre></div>
 <p>This command will start Python and run PyTorch on a single CPU core with access to
 all 8 GPUs.</p>
@@ -1869,11 +1876,11 @@ the search path for executables, and you need to modify the job script to use
 module, the <code>conda-python-simple</code> script is not even needed anymore (though still provided
 for compatibility with job scripts developed before those containers became available).</p>
 <p>The following commands now work just as well:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>salloc -N1 -pstandard-g -t 30:00
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>module load LUMI PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240315
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>srun -N1 -n1 --gpus 8 singularity exec $SIF python \
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    -c &#39;import torch; print(&quot;I have this many devices:&quot;, torch.cuda.device_count())&#39;
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>exit
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>salloc -N1 -pstandard-g -t 10:00
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>module load LUMI PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>srun -N1 -n1 --gpus 8 singularity exec $SIF python \
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    -c &#39;import torch; print(&quot;I have this many devices:&quot;, torch.cuda.device_count())&#39;
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>exit
 </code></pre></div>
 <h4 id="distributed-learning-example">Distributed learning example</h4>
 <p>The communication between LUMI's GPUs during training with PyTorch is done via 
@@ -1890,51 +1897,75 @@ installing and loading the module), and in particular the
 Together these scripts make job scripts a lot easier.</p>
 <p>An example job script using the <a href="https://github.com/Lumi-supercomputer/lumi-reframe-tests/tree/main/checks/containers/ML_containers/src/pytorch/mnist">mnist example</a>
 (itself based on an example by Google) is:</p>
+<!--
+Old locations of the data:
+
+wget http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+wget http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+wget http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+
+-->
+
 <ol>
 <li>
-<p>The mnist example needs some data files. We can get them in the job script (as we did before)
+<p>The mnist example needs some data files. We can get them in the job script
     but also simply install them now, avoiding repeated downloads when using the script multiple times
     (in the example with wrappers it was in the job script to have a one file example).
     First create a directory for your work on this example and go into that directory.
     In that directory we'll create a subdirectory <code>mnist</code> with some files. The first run of 
     the jobscript will download even more files.
     Assuming you are working on the login nodes where the <code>wget</code> program is already available,</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>mkdir<span class="w"> </span>mnist<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">pushd</span><span class="w"> </span>mnist
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>wget<span class="w"> </span>https://raw.githubusercontent.com/Lumi-supercomputer/lumi-reframe-tests/main/checks/containers/ML_containers/src/pytorch/mnist/mnist_DDP.py
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>model<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>model
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>wget<span class="w"> </span>https://github.com/Lumi-supercomputer/lumi-reframe-tests/raw/main/checks/containers/ML_containers/src/pytorch/mnist/model/model_gpu.dat
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nb">popd</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>mkdir<span class="w"> </span>mnist<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">pushd</span><span class="w"> </span>mnist
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>wget<span class="w"> </span>https://raw.githubusercontent.com/Lumi-supercomputer/lumi-reframe-tests/98327968ff300ed0181d5d14b5dd49cdf1d7b743/checks/containers/ML_containers/src/pytorch/mnist/mnist_DDP.py
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>sed<span class="w"> </span>-i<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;s|download=True|download=False|&#39;</span><span class="w"> </span>mnist_DDP.py
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>model<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>model
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>wget<span class="w"> </span>https://github.com/Lumi-supercomputer/lumi-reframe-tests/raw/98327968ff300ed0181d5d14b5dd49cdf1d7b743/checks/containers/ML_containers/src/pytorch/mnist/model/model_gpu.dat
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nb">cd</span><span class="w"> </span>..
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>data/MNIST/raw
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="nb">pushd</span><span class="w"> </span>data/MNIST/raw
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/train-images-idx3-ubyte.gz
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/train-labels-idx1-ubyte.gz
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/t10k-images-idx3-ubyte.gz
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/t10k-labels-idx1-ubyte.gz<span class="w">    </span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>gunzip<span class="w"> </span>-k<span class="w"> </span>*.gz
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="nb">popd</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="k">for</span><span class="w"> </span>number<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">31</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>data<span class="w"> </span>data<span class="nv">$number</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="nb">popd</span>
 </code></pre></div>
 <p>will fetch the two files we need to start.</p>
 </li>
 <li>
 <p>We can now create the jobscript <code>mnist.slurm</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="ch">#!/bin/bash -e</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1">#SBATCH --nodes=4</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1">#SBATCH --gpus-per-node=8</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1">#SBATCH --tasks-per-node=8</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1">#SBATCH --cpus-per-task=7</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1">#SBATCH --output=&quot;output_%x_%j.txt&quot;</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1">#SBATCH --partition=standard-g</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1">#SBATCH --mem=480G</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="c1">#SBATCH --time=00:10:00</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1">#SBATCH --account=project_&lt;your_project_id&gt;</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>module<span class="w"> </span>load<span class="w"> </span>LUMI<span class="w">  </span><span class="c1"># Which version doesn&#39;t matter, it is only to get the container.</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>module<span class="w"> </span>load<span class="w"> </span>PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240315
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="c1"># Optional: Inject the environment variables for NCCL debugging into the container.   </span>
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="c1"># This will produce a lot of debug output!     </span>
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SINGULARITYENV_NCCL_DEBUG</span><span class="o">=</span>INFO
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SINGULARITYENV_NCCL_DEBUG_SUBSYS</span><span class="o">=</span>INIT,COLL
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="nv">c</span><span class="o">=</span>fe
-<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="nv">MYMASKS</span><span class="o">=</span><span class="s2">&quot;0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000000000&quot;</span>
-<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>
-<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="nb">cd</span><span class="w"> </span>mnist
-<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>srun<span class="w"> </span>--cpu-bind<span class="o">=</span>mask_cpu:<span class="nv">$MYMASKS</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">  </span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="nv">$SIFPYTORCH</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">    </span>conda-python-distributed<span class="w"> </span>-u<span class="w"> </span>mnist_DDP.py<span class="w"> </span>--gpu<span class="w"> </span>--modelpath<span class="w"> </span>model
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="ch">#!/bin/bash -e</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1">#SBATCH --nodes=4</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1">#SBATCH --gpus-per-node=8</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1">#SBATCH --tasks-per-node=8</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1">#SBATCH --cpus-per-task=7</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1">#SBATCH --output=&quot;output_%x_%j.txt&quot;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1">#SBATCH --partition=standard-g</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1">#SBATCH --mem=480G</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="c1">#SBATCH --time=00:10:00</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="c1">#SBATCH --account=project_&lt;your_project_id&gt;</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>module<span class="w"> </span>load<span class="w"> </span>LUMI<span class="w">  </span><span class="c1"># Which version doesn&#39;t matter, it is only to get the container.</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>module<span class="w"> </span>load<span class="w"> </span>PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="c1"># Optional: Inject the environment variables for NCCL debugging into the container.   </span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="c1"># This will produce a lot of debug output!     </span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_DEBUG</span><span class="o">=</span>INFO
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_DEBUG_SUBSYS</span><span class="o">=</span>INIT,COLL
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="nv">c</span><span class="o">=</span>fe
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="nv">MYMASKS</span><span class="o">=</span><span class="s2">&quot;0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000000000&quot;</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="nb">cd</span><span class="w"> </span>mnist
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>srun<span class="w"> </span>--cpu-bind<span class="o">=</span>mask_cpu:<span class="nv">$MYMASKS</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">  </span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="nv">$SIFPYTORCH</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">    </span>conda-python-distributed<span class="w"> </span>-u<span class="w"> </span>mnist_DDP.py<span class="w"> </span>--gpu<span class="w"> </span>--modelpath<span class="w"> </span>model
 </code></pre></div>
 <details class="note">
 <summary>Container modules installed before March 9, 2024</summary>
@@ -1946,53 +1977,54 @@ the search path for executables, and you need to modify the job script to use
 the regular ordering, so we reorder the CPU cores for each task so that the first task on a node
 gets the cores most closely to GPU 0, etc. </p>
 <p>The jobscript also shows how environment variables to enable debugging of the RCCL communication can be
-set outside the container. Basically, if the name of an environment variable is prepended with <code>SINGULARITYENV_</code>,
-it will be injected in the container by the <code>singularity</code> command. </p>
+set outside the container. This is really as if they are set in the container.</p>
+<p>If those variables would in some way already be defined in the container (which is not the case), you could still
+overwrite the value set in the container by prepending the name of the variable with <code>SINGULARITYENV_</code>. </p>
 </li>
 </ol>
 <details class="note">
 <summary>Inside the <code>conda-python-distributed</code> script (if you need to modify things)</summary>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="ch">#!/bin/bash -e</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Make sure GPUs are up</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span>rocm-smi
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="k">fi</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>sleep<span class="w"> </span><span class="m">2</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># MIOPEN needs some initialisation for the cache as the default location</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="c1"># does not work on LUMI as Lustre does not provide the necessary features.</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="k">fi</span>
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>sleep<span class="w"> </span><span class="m">2</span>
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>
-<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="c1"># Set interfaces to be used by RCCL.</span>
-<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="c1"># This is needed as otherwise RCCL tries to use a network interface it has</span>
-<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="c1"># no access to on LUMI.</span>
-<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_SOCKET_IFNAME</span><span class="o">=</span>hsn0,hsn1,hsn2,hsn3
-<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_NET_GDR_LEVEL</span><span class="o">=</span><span class="m">3</span>
-<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>
-<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="c1"># Set ROCR_VISIBLE_DEVICES so that each task uses the proper GPU</span>
-<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ROCR_VISIBLE_DEVICES</span><span class="o">=</span><span class="nv">$SLURM_LOCALID</span>
-<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>
-<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="c1"># Report affinity to check</span>
-<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Rank </span><span class="nv">$SLURM_PROCID</span><span class="s2"> --&gt; </span><span class="k">$(</span>taskset<span class="w"> </span>-p<span class="w"> </span><span class="nv">$$</span><span class="k">)</span><span class="s2">; GPU </span><span class="nv">$ROCR_VISIBLE_DEVICES</span><span class="s2">&quot;</span>
-<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>
-<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="c1"># The usual PyTorch initialisations (also needed on NVIDIA)</span>
-<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="c1"># Note that since we fix the port ID it is not possible to run, e.g., two</span>
-<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="c1"># instances via this script using half a node each.</span>
-<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>/runscripts/get-master<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
-<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
-<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="nb">export</span><span class="w"> </span><span class="nv">WORLD_SIZE</span><span class="o">=</span><span class="nv">$SLURM_NPROCS</span>
-<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RANK</span><span class="o">=</span><span class="nv">$SLURM_PROCID</span>
-<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>
-<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a><span class="c1"># Run application</span>
-<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>python<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="ch">#!/bin/bash -e</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Make sure GPUs are up</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span>rocm-smi
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="k">fi</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>sleep<span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="c1"># MIOPEN needs some initialisation for the cache as the default location</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="c1"># does not work on LUMI as Lustre does not provide the necessary features.</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="k">fi</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>sleep<span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="c1"># Set interfaces to be used by RCCL.</span>
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="c1"># This is needed as otherwise RCCL tries to use a network interface it has</span>
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a><span class="c1"># no access to on LUMI.</span>
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_SOCKET_IFNAME</span><span class="o">=</span>hsn0,hsn1,hsn2,hsn3
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_NET_GDR_LEVEL</span><span class="o">=</span><span class="m">3</span>
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a><span class="c1"># Set ROCR_VISIBLE_DEVICES so that each task uses the proper GPU</span>
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ROCR_VISIBLE_DEVICES</span><span class="o">=</span><span class="nv">$SLURM_LOCALID</span>
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a><span class="c1"># Report affinity to check</span>
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Rank </span><span class="nv">$SLURM_PROCID</span><span class="s2"> --&gt; </span><span class="k">$(</span>taskset<span class="w"> </span>-p<span class="w"> </span><span class="nv">$$</span><span class="k">)</span><span class="s2">; GPU </span><span class="nv">$ROCR_VISIBLE_DEVICES</span><span class="s2">&quot;</span>
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a><span class="c1"># The usual PyTorch initialisations (also needed on NVIDIA)</span>
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a><span class="c1"># Note that since we fix the port ID it is not possible to run, e.g., two</span>
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a><span class="c1"># instances via this script using half a node each.</span>
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>/runscripts/get-master<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a><span class="nb">export</span><span class="w"> </span><span class="nv">WORLD_SIZE</span><span class="o">=</span><span class="nv">$SLURM_NPROCS</span>
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RANK</span><span class="o">=</span><span class="nv">$SLURM_PROCID</span>
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a><span class="c1"># Run application</span>
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>python<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
 </code></pre></div>
 <p>The script sets a number of environment variables. Some are fairly standard when using PyTorch
 on an HPC cluster while others are specific for the LUMI interconnect and architecture or the 
@@ -2000,19 +2032,19 @@ AMD ROCm environment.</p>
 <p>The <code>MIOPEN_</code> environment variables are needed to make 
 <a href="https://rocm.docs.amd.com/projects/MIOpen/en/latest/">MIOpen</a> create its caches on <code>/tmp</code>
 as doing this on Lustre fails because of file locking issues:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="k">fi</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="k">fi</span>
 </code></pre></div>
 <p>It is also essential to tell RCCL, the communication library, which network adapters to use. 
 These environment variables start with <code>NCCL_</code> because ROCm tries to keep things as similar as
 possible to NCCL in the NVIDIA ecosystem:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>export NCCL_SOCKET_IFNAME=hsn0,hsn1,hsn2,hsn3
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>export NCCL_NET_GDR_LEVEL=3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>export NCCL_SOCKET_IFNAME=hsn0,hsn1,hsn2,hsn3
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>export NCCL_NET_GDR_LEVEL=3
 </code></pre></div>
 <p>Without this RCCL may try to use a network adapter meant for system management rather than
 inter-node communications!</p>
@@ -2020,8 +2052,8 @@ inter-node communications!</p>
 <p>Furthermore some environment variables are needed by PyTorch itself that are also needed on
 NVIDIA systems.</p>
 <p>PyTorch needs to find the master for communication which is done through</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>/runscripts/get-master<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>/runscripts/get-master<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
 </code></pre></div>
 <p>The <code>get-master</code> script that is used here is a Python script to determine the master node 
 for communication and also already provided in the <code>/runscripts</code> subdirectory in the 
@@ -2036,8 +2068,8 @@ this version of the script.</strong></p>
 <p>To install the container with EasyBuild, follow the instructions in the
 <a href="https://docs.lumi-supercomputer.eu/software/installing/easybuild/">EasyBuild section of the LUMI documentation, section "Software"</a>,
 and use the dummy partition <code>container</code>, e.g.:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>module load LUMI partition/container EasyBuild-user
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>eb PyTorch-2.2.0-rocm-5.6.1-python-3.10-singularity-20240315.eb
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>module load LUMI partition/container EasyBuild-user
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>eb PyTorch-2.3.1-rocm-6.0.3-python-3.12-singularity-20240923.eb
 </code></pre></div>
 <p>To use the container after installation, the <code>EasyBuild-user</code> module is not needed nor
 is the <code>container</code> partition. The module will be available in all versions of the LUMI stack
@@ -2059,73 +2091,70 @@ so the general principles really need to be discussed in the main LUMI docs.
 
 <h4 id="manual-procedure">Manual procedure</h4>
 <p>Let's demonstrate how the module can be extended by using <code>pip</code> to install packages in the virtual
-environment. We'll demonstrate using the <code>PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240315</code>
+environment. We'll demonstrate using the <code>PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923</code>
 module where we assume that you have already installed this module:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>module<span class="w"> </span>load<span class="w"> </span>CrayEnv
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>module<span class="w"> </span>load<span class="w"> </span>PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240315
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>module<span class="w"> </span>load<span class="w"> </span>CrayEnv
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>module<span class="w"> </span>load<span class="w"> </span>PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923
 </code></pre></div>
 <p>Let's check a directory outside the container:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ls<span class="w"> </span>-l<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software/venv/pytorch
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>ls<span class="w"> </span>-l<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software/venv/pytorch
 </code></pre></div>
 <p>which produces something along the lines of</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>drwxrwsr-x 2 username project_46XYYYYYY 4096 Mar 25 17:15 bin
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>drwxrwsr-x 2 username project_46XYYYYYY 4096 Mar 25 17:14 include
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>drwxrwsr-x 3 username project_46XYYYYYY 4096 Mar 25 17:14 lib
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>lrwxrwxrwx 1 username project_46XYYYYYY    3 Mar 25 17:14 lib64 -&gt; lib
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>-rw-rw-r-- 1 username project_46XYYYYYY   94 Mar 25 17:15 pyvenv.cfg
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>drwxrwsr-x 2 username project_46XYYYYYY 4096 Mar 25 17:15 bin
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>drwxrwsr-x 2 username project_46XYYYYYY 4096 Mar 25 17:14 include
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>drwxrwsr-x 3 username project_46XYYYYYY 4096 Mar 25 17:14 lib
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>lrwxrwxrwx 1 username project_46XYYYYYY    3 Mar 25 17:14 lib64 -&gt; lib
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>-rw-rw-r-- 1 username project_46XYYYYYY   94 Mar 25 17:15 pyvenv.cfg
 </code></pre></div>
 <p>The output is typical for a freshly initialised Python virtual environment.</p>
 <p>We can now enter the container:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>singularity<span class="w"> </span>shell<span class="w"> </span><span class="nv">$SIF</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>singularity<span class="w"> </span>shell<span class="w"> </span><span class="nv">$SIF</span>
 </code></pre></div>
 <p>At the singularity prompt, try</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>ls<span class="w"> </span>-l<span class="w"> </span>/user-software/venv/pytorch
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>ls<span class="w"> </span>-l<span class="w"> </span>/user-software/venv/pytorch
 </code></pre></div>
 <p>and notice that we have the same output as with the previous <code>ls</code> command that we executed outside
 the container. So the <code>RCONTAINERROOT/user-software</code> subdirectory is available in the container
 as <code>/user-software</code>.</p>
 <p>Executing</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>which<span class="w"> </span>python
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>which<span class="w"> </span>python3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>which<span class="w"> </span>python
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>which<span class="w"> </span>python3
 </code></pre></div>
 <p>which return the lines</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>/user-software/venv/pytorch/bin/python
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>/user-software/venv/pytorch/bin/python3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>/user-software/venv/pytorch/bin/python
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>/user-software/venv/pytorch/bin/python3
 </code></pre></div>
 <p>also shows that the virtual environment is already activated and that we get the <code>python</code> wrapper script
 from the virtual environment and not the system <code>python3</code> (there is a <code>python3</code> executable in <code>/usr/bin</code>)
 or the Conda <code>python</code> in <code>/opt/miniconda3/envs/pytorch/bin</code>.</p>
 <p>Let us install the <code>torchmetrics</code> package using <code>pip</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>pip<span class="w"> </span>install<span class="w"> </span>torchmetrics
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>pip<span class="w"> </span>install<span class="w"> </span>torchmetrics
 </code></pre></div>
 <p>To check if the package is present and can be loaded, try</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torchmetrics ; print( torchmetrics.__version__ )&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import torchmetrics ; print( torchmetrics.__version__ )&#39;</span>
 </code></pre></div>
 <p>and notice that it does print the version number of <code>torchmetrics</code>, so the package was
 successfully loaded.</p>
 <p>Now execute </p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>ls<span class="w"> </span>/user-software/venv/pytorch/lib/python3.10/site-packages/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>ls<span class="w"> </span>/user-software/venv/pytorch/lib/python3.12/site-packages/
 </code></pre></div>
 <p>and you'll get output similar to</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>_distutils_hack                       pkg_resources
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>distutils-precedence.pth              setuptools
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>lightning_utilities                   setuptools-65.5.0.dist-info
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>lightning_utilities-0.11.1.dist-info  torchmetrics
-<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>pip                                   torchmetrics-1.3.2.dist-info
-<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>pip-23.0.1.dist-info
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>lightning_utilities                     pip-24.0.dist-info
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>lightning_utilities-0.11.9.dist-info  torchmetrics
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>pip                                         torchmetrics-1.6.1.dist-info
 </code></pre></div>
 <p>which confirms that the <code>torchmetrics</code> package is indeed installed in the virtual environment.</p>
 <p>Let's leave the container (by executing the <code>exit</code> command) and check again what has happened outside
 the container:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>ls<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software/venv/pytorch/lib/python3.10/site-packages/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>ls<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software/venv/pytorch/lib/python3.12/site-packages/
 </code></pre></div>
 <p>and we get the same output as with the previous <code>ls</code> command. I.e., the installation file of the package
 is indeed saved outside the container.</p>
 <p>Now there is one remaining problem. Try</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>lfs<span class="w"> </span>find<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>lfs<span class="w"> </span>find<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
 </code></pre></div>
 <p>where <code>lfs find</code> is a version of the <code>find</code> command with some restrictions, but one that is a lot more
-friendly to the Lustre metadata servers. The output suggests that there are over 2300 files and directories
+friendly to the Lustre metadata servers. The output suggests that there are over 1950 files and directories
 in the <code>user-software</code> subdirectory. The Lustre filesystem doesn't like working with lots of small files
 and Python can sometimes open a lot of those files in a short amount of time. </p>
 <p>The module also provides a solution for this: The content of <code>$CONTAINERROOT/user-software</code> can be packed
@@ -2133,50 +2162,50 @@ in a single SquashFS file <code>$CONTAINERROOT/user-software.squashfs</code> and
 is being used, that file will be mounted in the container and provide <code>/user-software</code>. This may improve
 performance of Python in the container and is certainly appreciated by your fellow LUMI users.
 To this end, the module provides the <code>make-squashfs</code> script. Try</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>make-squashfs
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>ls<span class="w"> </span><span class="nv">$CONTAINERROOT</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>make-squashfs
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>ls<span class="w"> </span><span class="nv">$CONTAINERROOT</span>
 </code></pre></div>
 <p>The second command outputs something along the lines of</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>bin
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>easybuild
-<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>lumi-pytorch-rocm-5.6.1-python-3.10-pytorch-v2.2.0-dockerhash-7392c9d4dcf7.sif
-<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>runscripts
-<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>user-software
-<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>user-software.squashfs
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>bin
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>easybuild
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>lumi-pytorch-rocm-6.0.3-python-3.12-pytorch-v2.3.1-dockerhash-2c1c14cafd28.sif
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>runscripts
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>user-software
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>user-software.squashfs
 </code></pre></div>
 <p>so we see that there is now indeed a file <code>user-software.squashfs</code> in that subdirectory.
 We do not automatically delete the <code>user-software</code> subdirectory, but you can delete it safely using</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>rm -rf $CONTAINERROOT/user-software
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>rm -rf $CONTAINERROOT/user-software
 </code></pre></div>
 <p>as it can be reconstructed (except for the file dates) from the SquashFS file using the script
 <code>unmake-squashfs</code> which is also provided by the module.</p>
 <p>Reload the module to let the changes take effect and go again in the container:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>module<span class="w"> </span>load<span class="w"> </span>PyTorch/2.2.0-rocm-5.6.1-python-3.10-singularity-20240315
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>singularity<span class="w"> </span>shell<span class="w"> </span><span class="nv">$SIF</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>module<span class="w"> </span>load<span class="w"> </span>PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>singularity<span class="w"> </span>shell<span class="w"> </span><span class="nv">$SIF</span>
 </code></pre></div>
 <p>Now try</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Test&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/user-software/test.txt
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Test&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/user-software/test.txt
 </code></pre></div>
 <p>and notice that we can no longer write in <code>/user-software</code>.</p>
 <p>Installing further packages with <code>pip</code> would not fail, but they would not be installed where you expect and instead
 would be installed in your home directory. The <code>pip</code> command would warn with</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>Defaulting to user installation because normal site-packages is not writeable
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>Defaulting to user installation because normal site-packages is not writeable
 </code></pre></div>
 <p>Try, e.g.,</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>pip<span class="w"> </span>install<span class="w"> </span>lightning-utilities
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">lightning</span><span class="o">==</span><span class="m">2</span>.2.5
 </code></pre></div>
-<p>and notice that the package (likely) landed in <code>~/.local/lib/python3.10/site-packages</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>ls ~/.local/lib/python3.10/site-packages
+<p>and notice that the package (likely) landed in <code>~/.local/lib/python3.12/site-packages</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>ls ~/.local/lib/python3.12/site-packages
 </code></pre></div>
-<p>will among other subdirectories contain the subdirectory <code>pytorch_lightning</code> and this is 
+<p>will among other subdirectories contain the subdirectory <code>lightning</code> and this is 
 not entirely what we want.</p>
 <p>Yet it is still possible to install additional packages by first unsquashing the <code>user-software.squashfs</code> file
 with </p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>unmake-squashfs
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>unmake-squashfs
 </code></pre></div>
 <p>(assuming that you had removed the <code>$CONTAINERROOT/user-software</code> subdirectory before),
 then deleting the SquashFS file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>rm<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software.squashfs
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>rm<span class="w"> </span><span class="nv">$CONTAINERROOT</span>/user-software.squashfs
 </code></pre></div>
 <p>and reload the module. Make sure though that you first remove the packages that were accidentally installed
 in <code>~/.local</code>.</p>
@@ -2188,22 +2217,22 @@ you may want to keep a copy of the <code>user-software.squashfs</code> file else
 as that may slow down EasyBuild considerably.</strong></p>
 <p>In some cases it is possible to adapt the EasyConfig file to also install the additional Python packages
 that are not yet included in the container. This is demonstrated in the 
-<code>PyTorch-2.2.0-rocm-5.6.1-python-3.10-singularity-exampleVenv-20240315.eb</code> example EasyConfig file
+<code>PyTorch-2.3.1-rocm-6.0.3-python-3.12-singularity-exampleVenv-20240923.eb</code> example EasyConfig file
 which is available on LUMI. First load EasyBuild to install containers, e.g.,</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>module<span class="w"> </span>load<span class="w"> </span>LUMI<span class="w"> </span>partition/container<span class="w"> </span>EasyBuild-user
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>module<span class="w"> </span>load<span class="w"> </span>LUMI<span class="w"> </span>partition/container<span class="w"> </span>EasyBuild-user
 </code></pre></div>
 <p>and then we can use EasyBuild to copy the recipe to our current directory:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>eb<span class="w"> </span>--copy-ec<span class="w"> </span>PyTorch-2.2.0-rocm-5.6.1-python-3.10-singularity-exampleVenv-20240315.eb<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>eb<span class="w"> </span>--copy-ec<span class="w"> </span>PyTorch-2.3.1-rocm-6.0.3-python-3.12-singularity-exampleVenv-20240923.eb<span class="w"> </span>.
 </code></pre></div>
 <p>You can now inspect the <code>.eb</code> file with your favourite editor. This file basically defines a lot
 of Python variables that EasyBuild uses, but is also a small program so we can even define and use
 extra variables that EasyBuild does not know. The magic happens in two blocks.</p>
 <p>First,</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">local_pip_requirements</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="s2">torchmetrics</span>
-<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="s2">pytorch-lightning</span>
-<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>
-<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="s2">&quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="n">local_pip_requirements</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="s2">torchmetrics</span>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="s2">pytorch-lightning</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="s2">&quot;&quot;&quot;</span>
 </code></pre></div>
 <!-- TODO: Is that empty line really needed? -->
 <p>(with an empty line at the end) defines the content that we will put in a <code>requirements.txt</code> file to 
@@ -2211,10 +2240,10 @@ tell <code>pip</code> which packages we want to install.</p>
 <p>The second part of the magic happens in some lines in the <code>postinstallcmds</code> block, a list of commands
 that EasyBuild will execute after the default installation procedure (which only copies the container
 <code>.sif</code> file to its location). Four lines in particular perform the magic:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>    <span class="sa">f</span><span class="s1">&#39;cat &gt;%(installdir)s/user-software/venv/requirements.txt &lt;&lt;EOF </span><span class="si">{</span><span class="n">local_pip_requirements</span><span class="si">}</span><span class="s1">EOF&#39;</span><span class="p">,</span>
-<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>    <span class="sa">f</span><span class="s1">&#39;singularity exec --bind </span><span class="si">{</span><span class="n">local_singularity_bind</span><span class="si">}</span><span class="s1"> --bind %(installdir)s/user-software:/user-software %(installdir)s/</span><span class="si">{</span><span class="n">local_sif</span><span class="si">}</span><span class="s1"> bash -c </span><span class="se">\&#39;</span><span class="s1">source /runscripts/init-conda-venv ; cd /user-software/venv ; pip install -r requirements.txt</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span>
-<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>    <span class="s1">&#39;</span><span class="si">%(installdir)s</span><span class="s1">/bin/make-squashfs&#39;</span><span class="p">,</span>
-<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>    <span class="s1">&#39;/bin/rm -rf </span><span class="si">%(installdir)s</span><span class="s1">/user-software&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>    <span class="sa">f</span><span class="s1">&#39;cat &gt;%(installdir)s/user-software/venv/requirements.txt &lt;&lt;EOF </span><span class="si">{</span><span class="n">local_pip_requirements</span><span class="si">}</span><span class="s1">EOF&#39;</span><span class="p">,</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>    <span class="sa">f</span><span class="s1">&#39;singularity exec --bind </span><span class="si">{</span><span class="n">local_singularity_bind</span><span class="si">}</span><span class="s1"> --bind %(installdir)s/user-software:/user-software %(installdir)s/</span><span class="si">{</span><span class="n">local_sif</span><span class="si">}</span><span class="s1"> bash -c </span><span class="se">\&#39;</span><span class="s1">source /runscripts/init-conda-venv ; cd /user-software/venv ; pip install -r requirements.txt</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>    <span class="s1">&#39;</span><span class="si">%(installdir)s</span><span class="s1">/bin/make-squashfs&#39;</span><span class="p">,</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a>    <span class="s1">&#39;/bin/rm -rf </span><span class="si">%(installdir)s</span><span class="s1">/user-software&#39;</span><span class="p">,</span>
 </code></pre></div>
 <p>The first line creates the <code>requirements.txt</code> file from the <code>local_pip_requirements</code> variable that we have
 created. The way to do this is a bit awkward by creating a shell command from it, but it works in most cases.
@@ -2223,7 +2252,7 @@ so we need to do all bindings by hand and use variables that are known to EasyBu
 The third line then creates the <code>user-software.squashfs</code> file and the last line deletes the <code>user-software</code>
 subdirectory. These four lines are generic as the package list is defined via the 
 <code>local_pip_requirements</code> environment variable.</p>
-<h3 id="alternative-direct-access">Alternative: Direct access</h3>
+<h3 id="alternative-direct-access-without-the-easybuild-generated-pytorch-module">Alternative: Direct access (without the EasyBuild-generated PyTorch module)</h3>
 <h4 id="getting-the-container-image">Getting the container image</h4>
 <p>The PyTorch containers are available in the following subdirectories of <code>/appl/local/containers</code>:</p>
 <ul>
@@ -2247,10 +2276,19 @@ your own file space (e.g., in <code>/project</code>,) as there is no guarantee t
 available centrally on the system for as long as you want.</p>
 <p>When using the containers without the modules, you will have to take care of the bindings as some
 system files are needed for, e.g., RCCL. The recommended mininmal bindings are:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>-B /var/spool/slurmd,/opt/cray/,/usr/lib64/libcxi.so.1,/usr/lib64/libjansson.so.4
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>-B /var/spool/slurmd,/opt/cray/,/usr/lib64/libcxi.so.1
 </code></pre></div>
-<p>and the bindings you need to access the files you want to use from <code>/scratch</code>, <code>/flash</code> and/or <code>/project</code>.</p>
+<p>and the bindings you need to access the files you want to use from <code>/scratch</code>, <code>/flash</code> and/or <code>/project</code>: </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>-B /pfs,/scratch,/projappl,/project,/flash,/appl
+</code></pre></div>
 <p>Note that the list recommended bindings may change after a system update.</p>
+<p>If you want to quickly check what Python packages are available in the containers in those directories,
+you don't need all the bind points and a quick</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>singularity exec &lt;path-to-sif-file&gt; bash -c &#39;$WITH_CONDA ; pip list&#39;
+</code></pre></div>
+<p>will do. Note the single quotes though as we don't want the <code>$WITH_CONDA</code> to be expanded outside 
+the container (and of course replace <code>&lt;path-to-sif-file&gt;</code> with the actual path to and name of 
+the SIF file you want to check.)</p>
 <p>Alternatively, you can also build your <a href="../../r/rocm/#using-the-images-as-base-image-for-cotainr">own container image on top of the
 ROCm containers that we provide with cotainr</a>.</p>
 <p>If you use PyTorch containers from other sources, take into account that</p>
@@ -2267,7 +2305,10 @@ ROCm containers that we provide with cotainr</a>.</p>
 </li>
 <li>
 <p>Similarly the <code>mpi4py</code> package (if included) may not be compatible with the interconnect
-    on LUMI, also resulting in poor performance or failure. You may want to make sure that an
+    on LUMI, also resulting in poor performance or failure. For AI packages, things will
+    often still be OK as MPI is often only used during the initialisation after which 
+    communication is done through RCCL. 
+    You may want to make sure that an
     MPI implementation that is ABI-compatible with Cray MPICH is used so that you can then try
     to overwrite it with Cray MPICH.</p>
 </li>
@@ -2286,84 +2327,86 @@ The text is written in such a way though that it can be read without first readi
 <li>
 <p>First one needs to create the script <code>get-master.py</code> that will be used to determine the
     master node for communication:</p>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kn">import</span> <span class="nn">argparse</span>
-<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="k">def</span> <span class="nf">get_parser</span><span class="p">():</span>
-<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Extract master node name from Slurm node list&quot;</span><span class="p">,</span>
-<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a>            <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
-<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;nodelist&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Slurm nodelist&quot;</span><span class="p">)</span>
-<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a>    <span class="k">return</span> <span class="n">parser</span>
-<a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a>
-<a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a>
-<a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-<a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a>    <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">()</span>
-<a id="__codelineno-43-11" name="__codelineno-43-11" href="#__codelineno-43-11"></a>    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-<a id="__codelineno-43-12" name="__codelineno-43-12" href="#__codelineno-43-12"></a>
-<a id="__codelineno-43-13" name="__codelineno-43-13" href="#__codelineno-43-13"></a>    <span class="n">first_nodelist</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">nodelist</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<a id="__codelineno-43-14" name="__codelineno-43-14" href="#__codelineno-43-14"></a>
-<a id="__codelineno-43-15" name="__codelineno-43-15" href="#__codelineno-43-15"></a>    <span class="k">if</span> <span class="s1">&#39;[&#39;</span> <span class="ow">in</span> <span class="n">first_nodelist</span><span class="p">:</span>
-<a id="__codelineno-43-16" name="__codelineno-43-16" href="#__codelineno-43-16"></a>        <span class="n">a</span> <span class="o">=</span> <span class="n">first_nodelist</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">)</span>
-<a id="__codelineno-43-17" name="__codelineno-43-17" href="#__codelineno-43-17"></a>        <span class="n">first_node</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<a id="__codelineno-43-18" name="__codelineno-43-18" href="#__codelineno-43-18"></a>
-<a id="__codelineno-43-19" name="__codelineno-43-19" href="#__codelineno-43-19"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-43-20" name="__codelineno-43-20" href="#__codelineno-43-20"></a>        <span class="n">first_node</span> <span class="o">=</span> <span class="n">first_nodelist</span>
-<a id="__codelineno-43-21" name="__codelineno-43-21" href="#__codelineno-43-21"></a>
-<a id="__codelineno-43-22" name="__codelineno-43-22" href="#__codelineno-43-22"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">first_node</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kn">import</span> <span class="nn">argparse</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="k">def</span> <span class="nf">get_parser</span><span class="p">():</span>
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a>    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Extract master node name from Slurm node list&quot;</span><span class="p">,</span>
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a>            <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;nodelist&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Slurm nodelist&quot;</span><span class="p">)</span>
+<a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a>    <span class="k">return</span> <span class="n">parser</span>
+<a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a>
+<a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a>
+<a id="__codelineno-47-9" name="__codelineno-47-9" href="#__codelineno-47-9"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<a id="__codelineno-47-10" name="__codelineno-47-10" href="#__codelineno-47-10"></a>    <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">()</span>
+<a id="__codelineno-47-11" name="__codelineno-47-11" href="#__codelineno-47-11"></a>    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<a id="__codelineno-47-12" name="__codelineno-47-12" href="#__codelineno-47-12"></a>
+<a id="__codelineno-47-13" name="__codelineno-47-13" href="#__codelineno-47-13"></a>    <span class="n">first_nodelist</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">nodelist</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-47-14" name="__codelineno-47-14" href="#__codelineno-47-14"></a>
+<a id="__codelineno-47-15" name="__codelineno-47-15" href="#__codelineno-47-15"></a>    <span class="k">if</span> <span class="s1">&#39;[&#39;</span> <span class="ow">in</span> <span class="n">first_nodelist</span><span class="p">:</span>
+<a id="__codelineno-47-16" name="__codelineno-47-16" href="#__codelineno-47-16"></a>        <span class="n">a</span> <span class="o">=</span> <span class="n">first_nodelist</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">)</span>
+<a id="__codelineno-47-17" name="__codelineno-47-17" href="#__codelineno-47-17"></a>        <span class="n">first_node</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-47-18" name="__codelineno-47-18" href="#__codelineno-47-18"></a>
+<a id="__codelineno-47-19" name="__codelineno-47-19" href="#__codelineno-47-19"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-47-20" name="__codelineno-47-20" href="#__codelineno-47-20"></a>        <span class="n">first_node</span> <span class="o">=</span> <span class="n">first_nodelist</span>
+<a id="__codelineno-47-21" name="__codelineno-47-21" href="#__codelineno-47-21"></a>
+<a id="__codelineno-47-22" name="__codelineno-47-22" href="#__codelineno-47-22"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">first_node</span><span class="p">)</span>
 </code></pre></div>
-2.  Next we need another script that will run in the container to set up a number of
-environment variables that are needed to run PyTorch successfully on LUMI and at
-the end, call Python to run our example. Let's store the following script as
-<code>run-pytorch.sh</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="ch">#!/bin/bash -e</span>
-<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a>
-<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="c1"># Make sure GPUs are up</span>
-<a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a><span class="w">    </span>rocm-smi
-<a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="k">fi</span>
-<a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a>sleep<span class="w"> </span><span class="m">2</span>
-<a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a>
-<a id="__codelineno-44-9" name="__codelineno-44-9" href="#__codelineno-44-9"></a><span class="c1"># !Remove this if using an image extended with cotainr or a container from elsewhere.!</span>
-<a id="__codelineno-44-10" name="__codelineno-44-10" href="#__codelineno-44-10"></a><span class="c1"># Start conda environment inside the container</span>
-<a id="__codelineno-44-11" name="__codelineno-44-11" href="#__codelineno-44-11"></a><span class="nv">$WITH_CONDA</span>
-<a id="__codelineno-44-12" name="__codelineno-44-12" href="#__codelineno-44-12"></a>
-<a id="__codelineno-44-13" name="__codelineno-44-13" href="#__codelineno-44-13"></a><span class="c1"># MIOPEN needs some initialisation for the cache as the default location</span>
-<a id="__codelineno-44-14" name="__codelineno-44-14" href="#__codelineno-44-14"></a><span class="c1"># does not work on LUMI as Lustre does not provide the necessary features.</span>
-<a id="__codelineno-44-15" name="__codelineno-44-15" href="#__codelineno-44-15"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
-<a id="__codelineno-44-16" name="__codelineno-44-16" href="#__codelineno-44-16"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-44-17" name="__codelineno-44-17" href="#__codelineno-44-17"></a>
-<a id="__codelineno-44-18" name="__codelineno-44-18" href="#__codelineno-44-18"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-44-19" name="__codelineno-44-19" href="#__codelineno-44-19"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-44-20" name="__codelineno-44-20" href="#__codelineno-44-20"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-44-21" name="__codelineno-44-21" href="#__codelineno-44-21"></a><span class="k">fi</span>
-<a id="__codelineno-44-22" name="__codelineno-44-22" href="#__codelineno-44-22"></a>sleep<span class="w"> </span><span class="m">2</span>
-<a id="__codelineno-44-23" name="__codelineno-44-23" href="#__codelineno-44-23"></a>
-<a id="__codelineno-44-24" name="__codelineno-44-24" href="#__codelineno-44-24"></a><span class="c1"># Optional! Set NCCL debug output to check correct use of aws-ofi-rccl (these are very verbose)</span>
-<a id="__codelineno-44-25" name="__codelineno-44-25" href="#__codelineno-44-25"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_DEBUG</span><span class="o">=</span>INFO
-<a id="__codelineno-44-26" name="__codelineno-44-26" href="#__codelineno-44-26"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_DEBUG_SUBSYS</span><span class="o">=</span>INIT,COLL
-<a id="__codelineno-44-27" name="__codelineno-44-27" href="#__codelineno-44-27"></a>
-<a id="__codelineno-44-28" name="__codelineno-44-28" href="#__codelineno-44-28"></a><span class="c1"># Set interfaces to be used by RCCL.</span>
-<a id="__codelineno-44-29" name="__codelineno-44-29" href="#__codelineno-44-29"></a><span class="c1"># This is needed as otherwise RCCL tries to use a network interface it has</span>
-<a id="__codelineno-44-30" name="__codelineno-44-30" href="#__codelineno-44-30"></a><span class="c1"># no access to on LUMI.</span>
-<a id="__codelineno-44-31" name="__codelineno-44-31" href="#__codelineno-44-31"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_SOCKET_IFNAME</span><span class="o">=</span>hsn0,hsn1,hsn2,hsn3
-<a id="__codelineno-44-32" name="__codelineno-44-32" href="#__codelineno-44-32"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_NET_GDR_LEVEL</span><span class="o">=</span><span class="m">3</span>
-<a id="__codelineno-44-33" name="__codelineno-44-33" href="#__codelineno-44-33"></a>
-<a id="__codelineno-44-34" name="__codelineno-44-34" href="#__codelineno-44-34"></a><span class="c1"># Set ROCR_VISIBLE_DEVICES so that each task uses the proper GPU</span>
-<a id="__codelineno-44-35" name="__codelineno-44-35" href="#__codelineno-44-35"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ROCR_VISIBLE_DEVICES</span><span class="o">=</span><span class="nv">$SLURM_LOCALID</span>
-<a id="__codelineno-44-36" name="__codelineno-44-36" href="#__codelineno-44-36"></a>
-<a id="__codelineno-44-37" name="__codelineno-44-37" href="#__codelineno-44-37"></a><span class="c1"># Report affinity to check</span>
-<a id="__codelineno-44-38" name="__codelineno-44-38" href="#__codelineno-44-38"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Rank </span><span class="nv">$SLURM_PROCID</span><span class="s2"> --&gt; </span><span class="k">$(</span>taskset<span class="w"> </span>-p<span class="w"> </span><span class="nv">$$</span><span class="k">)</span><span class="s2">; GPU </span><span class="nv">$ROCR_VISIBLE_DEVICES</span><span class="s2">&quot;</span>
-<a id="__codelineno-44-39" name="__codelineno-44-39" href="#__codelineno-44-39"></a>
-<a id="__codelineno-44-40" name="__codelineno-44-40" href="#__codelineno-44-40"></a><span class="c1"># The usual PyTorch initialisations (also needed on NVIDIA)</span>
-<a id="__codelineno-44-41" name="__codelineno-44-41" href="#__codelineno-44-41"></a><span class="c1"># Note that since we fix the port ID it is not possible to run, e.g., two</span>
-<a id="__codelineno-44-42" name="__codelineno-44-42" href="#__codelineno-44-42"></a><span class="c1"># instances via this script using half a node each.</span>
-<a id="__codelineno-44-43" name="__codelineno-44-43" href="#__codelineno-44-43"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>python<span class="w"> </span>get-master.py<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
-<a id="__codelineno-44-44" name="__codelineno-44-44" href="#__codelineno-44-44"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
-<a id="__codelineno-44-45" name="__codelineno-44-45" href="#__codelineno-44-45"></a><span class="nb">export</span><span class="w"> </span><span class="nv">WORLD_SIZE</span><span class="o">=</span><span class="nv">$SLURM_NPROCS</span>
-<a id="__codelineno-44-46" name="__codelineno-44-46" href="#__codelineno-44-46"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RANK</span><span class="o">=</span><span class="nv">$SLURM_PROCID</span>
-<a id="__codelineno-44-47" name="__codelineno-44-47" href="#__codelineno-44-47"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ROCR_VISIBLE_DEVICES</span><span class="o">=</span><span class="nv">$SLURM_LOCALID</span>
-<a id="__codelineno-44-48" name="__codelineno-44-48" href="#__codelineno-44-48"></a>
-<a id="__codelineno-44-49" name="__codelineno-44-49" href="#__codelineno-44-49"></a><span class="c1"># Run app</span>
-<a id="__codelineno-44-50" name="__codelineno-44-50" href="#__codelineno-44-50"></a><span class="nb">cd</span><span class="w"> </span>/workdir/mnist
-<a id="__codelineno-44-51" name="__codelineno-44-51" href="#__codelineno-44-51"></a>python<span class="w"> </span>-u<span class="w"> </span>mnist_DDP.py<span class="w"> </span>--gpu<span class="w"> </span>--modelpath<span class="w"> </span>model
+</li>
+<li>
+<p>Next we need another script that will run in the container to set up a number of
+    environment variables that are needed to run PyTorch successfully on LUMI and at
+    the end, call Python to run our example. Let's store the following script as
+    <code>run-pytorch.sh</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="ch">#!/bin/bash -e</span>
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>
+<a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="c1"># Make sure GPUs are up</span>
+<a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a><span class="w">    </span>rocm-smi
+<a id="__codelineno-48-6" name="__codelineno-48-6" href="#__codelineno-48-6"></a><span class="k">fi</span>
+<a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a>sleep<span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-48-8" name="__codelineno-48-8" href="#__codelineno-48-8"></a>
+<a id="__codelineno-48-9" name="__codelineno-48-9" href="#__codelineno-48-9"></a><span class="c1"># !Remove this if using an image extended with cotainr or a container from elsewhere.!</span>
+<a id="__codelineno-48-10" name="__codelineno-48-10" href="#__codelineno-48-10"></a><span class="c1"># Start conda environment inside the container</span>
+<a id="__codelineno-48-11" name="__codelineno-48-11" href="#__codelineno-48-11"></a><span class="nv">$WITH_CONDA</span>
+<a id="__codelineno-48-12" name="__codelineno-48-12" href="#__codelineno-48-12"></a>
+<a id="__codelineno-48-13" name="__codelineno-48-13" href="#__codelineno-48-13"></a><span class="c1"># MIOPEN needs some initialisation for the cache as the default location</span>
+<a id="__codelineno-48-14" name="__codelineno-48-14" href="#__codelineno-48-14"></a><span class="c1"># does not work on LUMI as Lustre does not provide the necessary features.</span>
+<a id="__codelineno-48-15" name="__codelineno-48-15" href="#__codelineno-48-15"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
+<a id="__codelineno-48-16" name="__codelineno-48-16" href="#__codelineno-48-16"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-48-17" name="__codelineno-48-17" href="#__codelineno-48-17"></a>
+<a id="__codelineno-48-18" name="__codelineno-48-18" href="#__codelineno-48-18"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-48-19" name="__codelineno-48-19" href="#__codelineno-48-19"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-48-20" name="__codelineno-48-20" href="#__codelineno-48-20"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-48-21" name="__codelineno-48-21" href="#__codelineno-48-21"></a><span class="k">fi</span>
+<a id="__codelineno-48-22" name="__codelineno-48-22" href="#__codelineno-48-22"></a>sleep<span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-48-23" name="__codelineno-48-23" href="#__codelineno-48-23"></a>
+<a id="__codelineno-48-24" name="__codelineno-48-24" href="#__codelineno-48-24"></a><span class="c1"># Optional! Set NCCL debug output to check correct use of aws-ofi-rccl (these are very verbose)</span>
+<a id="__codelineno-48-25" name="__codelineno-48-25" href="#__codelineno-48-25"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_DEBUG</span><span class="o">=</span>INFO
+<a id="__codelineno-48-26" name="__codelineno-48-26" href="#__codelineno-48-26"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_DEBUG_SUBSYS</span><span class="o">=</span>INIT,COLL
+<a id="__codelineno-48-27" name="__codelineno-48-27" href="#__codelineno-48-27"></a>
+<a id="__codelineno-48-28" name="__codelineno-48-28" href="#__codelineno-48-28"></a><span class="c1"># Set interfaces to be used by RCCL.</span>
+<a id="__codelineno-48-29" name="__codelineno-48-29" href="#__codelineno-48-29"></a><span class="c1"># This is needed as otherwise RCCL tries to use a network interface it has</span>
+<a id="__codelineno-48-30" name="__codelineno-48-30" href="#__codelineno-48-30"></a><span class="c1"># no access to on LUMI.</span>
+<a id="__codelineno-48-31" name="__codelineno-48-31" href="#__codelineno-48-31"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_SOCKET_IFNAME</span><span class="o">=</span>hsn0,hsn1,hsn2,hsn3
+<a id="__codelineno-48-32" name="__codelineno-48-32" href="#__codelineno-48-32"></a><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_NET_GDR_LEVEL</span><span class="o">=</span><span class="m">3</span>
+<a id="__codelineno-48-33" name="__codelineno-48-33" href="#__codelineno-48-33"></a>
+<a id="__codelineno-48-34" name="__codelineno-48-34" href="#__codelineno-48-34"></a><span class="c1"># Set ROCR_VISIBLE_DEVICES so that each task uses the proper GPU</span>
+<a id="__codelineno-48-35" name="__codelineno-48-35" href="#__codelineno-48-35"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ROCR_VISIBLE_DEVICES</span><span class="o">=</span><span class="nv">$SLURM_LOCALID</span>
+<a id="__codelineno-48-36" name="__codelineno-48-36" href="#__codelineno-48-36"></a>
+<a id="__codelineno-48-37" name="__codelineno-48-37" href="#__codelineno-48-37"></a><span class="c1"># Report affinity to check</span>
+<a id="__codelineno-48-38" name="__codelineno-48-38" href="#__codelineno-48-38"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Rank </span><span class="nv">$SLURM_PROCID</span><span class="s2"> --&gt; </span><span class="k">$(</span>taskset<span class="w"> </span>-p<span class="w"> </span><span class="nv">$$</span><span class="k">)</span><span class="s2">; GPU </span><span class="nv">$ROCR_VISIBLE_DEVICES</span><span class="s2">&quot;</span>
+<a id="__codelineno-48-39" name="__codelineno-48-39" href="#__codelineno-48-39"></a>
+<a id="__codelineno-48-40" name="__codelineno-48-40" href="#__codelineno-48-40"></a><span class="c1"># The usual PyTorch initialisations (also needed on NVIDIA)</span>
+<a id="__codelineno-48-41" name="__codelineno-48-41" href="#__codelineno-48-41"></a><span class="c1"># Note that since we fix the port ID it is not possible to run, e.g., two</span>
+<a id="__codelineno-48-42" name="__codelineno-48-42" href="#__codelineno-48-42"></a><span class="c1"># instances via this script using half a node each.</span>
+<a id="__codelineno-48-43" name="__codelineno-48-43" href="#__codelineno-48-43"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>python<span class="w"> </span>/workdir/get-master.py<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
+<a id="__codelineno-48-44" name="__codelineno-48-44" href="#__codelineno-48-44"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
+<a id="__codelineno-48-45" name="__codelineno-48-45" href="#__codelineno-48-45"></a><span class="nb">export</span><span class="w"> </span><span class="nv">WORLD_SIZE</span><span class="o">=</span><span class="nv">$SLURM_NPROCS</span>
+<a id="__codelineno-48-46" name="__codelineno-48-46" href="#__codelineno-48-46"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RANK</span><span class="o">=</span><span class="nv">$SLURM_PROCID</span>
+<a id="__codelineno-48-47" name="__codelineno-48-47" href="#__codelineno-48-47"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ROCR_VISIBLE_DEVICES</span><span class="o">=</span><span class="nv">$SLURM_LOCALID</span>
+<a id="__codelineno-48-48" name="__codelineno-48-48" href="#__codelineno-48-48"></a>
+<a id="__codelineno-48-49" name="__codelineno-48-49" href="#__codelineno-48-49"></a><span class="c1"># Run app</span>
+<a id="__codelineno-48-50" name="__codelineno-48-50" href="#__codelineno-48-50"></a><span class="nb">cd</span><span class="w"> </span>/workdir/mnist
+<a id="__codelineno-48-51" name="__codelineno-48-51" href="#__codelineno-48-51"></a>python<span class="w"> </span>-u<span class="w"> </span>mnist_DDP.py<span class="w"> </span>--gpu<span class="w"> </span>--modelpath<span class="w"> </span>model
 </code></pre></div>
 <details class="note">
 <summary>What's going on in this script? (click to expand)</summary>
@@ -2373,10 +2416,10 @@ AMD ROCm environment.</p>
 <p>At the start we just print some information about the GPU. We do this only ones on each node
 on the process which is why we test on <code>$SLURM_LOCALID</code>, which is a numbering starting from 0
 on each node of the job:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span>rocm-smi
-<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="k">fi</span>
-<a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a>sleep<span class="w"> </span><span class="m">2</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="w">    </span>rocm-smi
+<a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a><span class="k">fi</span>
+<a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a>sleep<span class="w"> </span><span class="m">2</span>
 </code></pre></div>
 <p>The container uses a Conda environment internally. So to make the right version of Python
 and its packages availabe, we need to activate the environment. The precise command to
@@ -2385,19 +2428,19 @@ the variable as a bash command.</p>
 <p>The <code>MIOPEN_</code> environment variables are needed to make 
 <a href="https://rocm.docs.amd.com/projects/MIOpen/en/latest/">MIOpen</a> create its caches on <code>/tmp</code>
 as doing this on Lustre fails because of file locking issues:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
-<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a>
-<a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-46-6" name="__codelineno-46-6" href="#__codelineno-46-6"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
-<a id="__codelineno-46-7" name="__codelineno-46-7" href="#__codelineno-46-7"></a><span class="k">fi</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_USER_DB_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/</span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">-miopen-cache-</span><span class="nv">$SLURM_NODEID</span><span class="s2">&quot;</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MIOPEN_CUSTOM_CACHE_DIR</span><span class="o">=</span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a>
+<a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$SLURM_LOCALID</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-50-6" name="__codelineno-50-6" href="#__codelineno-50-6"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$MIOPEN_USER_DB_PATH</span>
+<a id="__codelineno-50-7" name="__codelineno-50-7" href="#__codelineno-50-7"></a><span class="k">fi</span>
 </code></pre></div>
 <p>It is also essential to tell RCCL, the communication library, which network adapters to use. 
 These environment variables start with <code>NCCL_</code> because ROCm tries to keep things as similar as
 possible to NCCL in the NVIDIA ecosystem:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>export NCCL_SOCKET_IFNAME=hsn0,hsn1,hsn2,hsn3
-<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>export NCCL_NET_GDR_LEVEL=3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>export NCCL_SOCKET_IFNAME=hsn0,hsn1,hsn2,hsn3
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a>export NCCL_NET_GDR_LEVEL=3
 </code></pre></div>
 <p>Without this RCCL may try to use a network adapter meant for system management rather than
 inter-node communications!</p>
@@ -2407,8 +2450,8 @@ This is again based on the local task ID of each Slurm task.</p>
 NVIDIA systems.</p>
 <p>PyTorch needs to find the master for communication which is done through the
 <code>get-master.py</code> script that we created before:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>python<span class="w"> </span>get-master.py<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
-<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="k">$(</span>python<span class="w"> </span>get-master.py<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_NODELIST</span><span class="s2">&quot;</span><span class="k">)</span>
+<a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="m">29500</span>
 </code></pre></div>
 <p><strong>As we fix the port number here, the <code>conda-python-distributed</code> script that we provide, 
 has to run on exclusive nodes.
@@ -2417,7 +2460,7 @@ a conflict for the TCP port for communication on the master as <code>MASTER_PORT
 this version of the script.</strong></p>
 </details>
 <p>Make sure the <code>run-pytorch.sh</code> script is executable:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>chmod<span class="w"> </span>ug+x<span class="w"> </span>run-pytorch.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>chmod<span class="w"> </span>ug+x<span class="w"> </span>run-pytorch.sh
 </code></pre></div>
 </li>
 <li>
@@ -2425,81 +2468,71 @@ this version of the script.</strong></p>
     but also simply install them now, avoiding repeated downloads when using the script multiple times
     (in the example with wrappers it was in the job script to have a one file example).
     Assuming you do this on the login nodes where the <code>wget</code> program is already available,</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>mkdir<span class="w"> </span>mnist<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">pushd</span><span class="w"> </span>mnist
-<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>wget<span class="w"> </span>https://raw.githubusercontent.com/Lumi-supercomputer/lumi-reframe-tests/main/checks/containers/ML_containers/src/pytorch/mnist/mnist_DDP.py
-<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>model<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>model
-<a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a>wget<span class="w"> </span>https://github.com/Lumi-supercomputer/lumi-reframe-tests/raw/main/checks/containers/ML_containers/src/pytorch/mnist/model/model_gpu.dat
-<a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a><span class="nb">popd</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>mkdir<span class="w"> </span>mnist<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">pushd</span><span class="w"> </span>mnist
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>wget<span class="w"> </span>https://raw.githubusercontent.com/Lumi-supercomputer/lumi-reframe-tests/98327968ff300ed0181d5d14b5dd49cdf1d7b743/checks/containers/ML_containers/src/pytorch/mnist/mnist_DDP.py
+<a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a>sed<span class="w"> </span>-i<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;s|download=True|download=False|&#39;</span><span class="w"> </span>mnist_DDP.py
+<a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>model<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>model
+<a id="__codelineno-54-5" name="__codelineno-54-5" href="#__codelineno-54-5"></a>wget<span class="w"> </span>https://github.com/Lumi-supercomputer/lumi-reframe-tests/raw/98327968ff300ed0181d5d14b5dd49cdf1d7b743/checks/containers/ML_containers/src/pytorch/mnist/model/model_gpu.dat
+<a id="__codelineno-54-6" name="__codelineno-54-6" href="#__codelineno-54-6"></a><span class="nb">cd</span><span class="w"> </span>..
+<a id="__codelineno-54-7" name="__codelineno-54-7" href="#__codelineno-54-7"></a>
+<a id="__codelineno-54-8" name="__codelineno-54-8" href="#__codelineno-54-8"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>data/MNIST/raw
+<a id="__codelineno-54-9" name="__codelineno-54-9" href="#__codelineno-54-9"></a><span class="nb">pushd</span><span class="w"> </span>data/MNIST/raw
+<a id="__codelineno-54-10" name="__codelineno-54-10" href="#__codelineno-54-10"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/train-images-idx3-ubyte.gz
+<a id="__codelineno-54-11" name="__codelineno-54-11" href="#__codelineno-54-11"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/train-labels-idx1-ubyte.gz
+<a id="__codelineno-54-12" name="__codelineno-54-12" href="#__codelineno-54-12"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/t10k-images-idx3-ubyte.gz
+<a id="__codelineno-54-13" name="__codelineno-54-13" href="#__codelineno-54-13"></a>wget<span class="w"> </span>https://github.com/golbin/TensorFlow-MNIST/raw/refs/heads/master/mnist/data/t10k-labels-idx1-ubyte.gz<span class="w">    </span>
+<a id="__codelineno-54-14" name="__codelineno-54-14" href="#__codelineno-54-14"></a>gunzip<span class="w"> </span>-k<span class="w"> </span>*.gz
+<a id="__codelineno-54-15" name="__codelineno-54-15" href="#__codelineno-54-15"></a><span class="nb">popd</span>
+<a id="__codelineno-54-16" name="__codelineno-54-16" href="#__codelineno-54-16"></a>
+<a id="__codelineno-54-17" name="__codelineno-54-17" href="#__codelineno-54-17"></a><span class="k">for</span><span class="w"> </span>number<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">31</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>data<span class="w"> </span>data<span class="nv">$number</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<a id="__codelineno-54-18" name="__codelineno-54-18" href="#__codelineno-54-18"></a>
+<a id="__codelineno-54-19" name="__codelineno-54-19" href="#__codelineno-54-19"></a><span class="nb">popd</span>
 </code></pre></div>
 </li>
 <li>
 <p>Finaly we can create our jobscript, e.g. <code>mnist.slurm</code>, which we will launch from the directory
     that also contains the <code>mnist</code> subdirectory and <code>get-master.py</code> and <code>run-pythorch.sh</code> scripts and the
     container image.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="ch">#!/bin/bash -e</span>
-<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="c1">#SBATCH --nodes=4</span>
-<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="c1">#SBATCH --gpus-per-node=8</span>
-<a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a><span class="c1">#SBATCH --tasks-per-node=8</span>
-<a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a><span class="c1">#SBATCH --cpus-per-task=7</span>
-<a id="__codelineno-51-6" name="__codelineno-51-6" href="#__codelineno-51-6"></a><span class="c1">#SBATCH --output=&quot;output_%x_%j.txt&quot;</span>
-<a id="__codelineno-51-7" name="__codelineno-51-7" href="#__codelineno-51-7"></a><span class="c1">#SBATCH --partition=standard-g</span>
-<a id="__codelineno-51-8" name="__codelineno-51-8" href="#__codelineno-51-8"></a><span class="c1">#SBATCH --mem=480G</span>
-<a id="__codelineno-51-9" name="__codelineno-51-9" href="#__codelineno-51-9"></a><span class="c1">#SBATCH --time=00:10:00</span>
-<a id="__codelineno-51-10" name="__codelineno-51-10" href="#__codelineno-51-10"></a><span class="c1">#SBATCH --account=project_&lt;your_project_id&gt;</span>
-<a id="__codelineno-51-11" name="__codelineno-51-11" href="#__codelineno-51-11"></a>
-<a id="__codelineno-51-12" name="__codelineno-51-12" href="#__codelineno-51-12"></a><span class="nv">CONTAINER</span><span class="o">=</span>your-container-image.sif
-<a id="__codelineno-51-13" name="__codelineno-51-13" href="#__codelineno-51-13"></a>
-<a id="__codelineno-51-14" name="__codelineno-51-14" href="#__codelineno-51-14"></a><span class="nv">c</span><span class="o">=</span>fe
-<a id="__codelineno-51-15" name="__codelineno-51-15" href="#__codelineno-51-15"></a><span class="nv">MYMASKS</span><span class="o">=</span><span class="s2">&quot;0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000000000&quot;</span>
-<a id="__codelineno-51-16" name="__codelineno-51-16" href="#__codelineno-51-16"></a>
-<a id="__codelineno-51-17" name="__codelineno-51-17" href="#__codelineno-51-17"></a>srun<span class="w"> </span>--cpu-bind<span class="o">=</span>mask_cpu:<span class="nv">$MYMASKS</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-51-18" name="__codelineno-51-18" href="#__codelineno-51-18"></a>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-51-19" name="__codelineno-51-19" href="#__codelineno-51-19"></a><span class="w">    </span>-B<span class="w"> </span>/var/spool/slurmd<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-51-20" name="__codelineno-51-20" href="#__codelineno-51-20"></a><span class="w">    </span>-B<span class="w"> </span>/opt/cray<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-51-21" name="__codelineno-51-21" href="#__codelineno-51-21"></a><span class="w">    </span>-B<span class="w"> </span>/usr/lib64/libcxi.so.1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-51-22" name="__codelineno-51-22" href="#__codelineno-51-22"></a><span class="w">    </span>-B<span class="w"> </span>/usr/lib64/libjansson.so.4<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-51-23" name="__codelineno-51-23" href="#__codelineno-51-23"></a><span class="w">    </span>-B<span class="w"> </span><span class="nv">$PWD</span>:/workdir<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-51-24" name="__codelineno-51-24" href="#__codelineno-51-24"></a><span class="w">    </span><span class="nv">$CONTAINER</span><span class="w"> </span>/workdir/run-pytorch.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="ch">#!/bin/bash -e</span>
+<a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a><span class="c1">#SBATCH --nodes=4</span>
+<a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a><span class="c1">#SBATCH --gpus-per-node=8</span>
+<a id="__codelineno-55-4" name="__codelineno-55-4" href="#__codelineno-55-4"></a><span class="c1">#SBATCH --tasks-per-node=8</span>
+<a id="__codelineno-55-5" name="__codelineno-55-5" href="#__codelineno-55-5"></a><span class="c1">#SBATCH --cpus-per-task=7</span>
+<a id="__codelineno-55-6" name="__codelineno-55-6" href="#__codelineno-55-6"></a><span class="c1">#SBATCH --output=&quot;output_%x_%j.txt&quot;</span>
+<a id="__codelineno-55-7" name="__codelineno-55-7" href="#__codelineno-55-7"></a><span class="c1">#SBATCH --partition=standard-g</span>
+<a id="__codelineno-55-8" name="__codelineno-55-8" href="#__codelineno-55-8"></a><span class="c1">#SBATCH --mem=480G</span>
+<a id="__codelineno-55-9" name="__codelineno-55-9" href="#__codelineno-55-9"></a><span class="c1">#SBATCH --time=00:10:00</span>
+<a id="__codelineno-55-10" name="__codelineno-55-10" href="#__codelineno-55-10"></a><span class="c1">#SBATCH --account=project_&lt;your_project_id&gt;</span>
+<a id="__codelineno-55-11" name="__codelineno-55-11" href="#__codelineno-55-11"></a>
+<a id="__codelineno-55-12" name="__codelineno-55-12" href="#__codelineno-55-12"></a><span class="nv">CONTAINER</span><span class="o">=</span>/appl/local/containers/easybuild-sif-images/lumi-pytorch-rocm-6.0.3-python-3.12-pytorch-v2.3.1-dockerhash-2c1c14cafd28.sif
+<a id="__codelineno-55-13" name="__codelineno-55-13" href="#__codelineno-55-13"></a>
+<a id="__codelineno-55-14" name="__codelineno-55-14" href="#__codelineno-55-14"></a><span class="nv">c</span><span class="o">=</span>fe
+<a id="__codelineno-55-15" name="__codelineno-55-15" href="#__codelineno-55-15"></a><span class="nv">MYMASKS</span><span class="o">=</span><span class="s2">&quot;0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">00000000,0x</span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">0000000000&quot;</span>
+<a id="__codelineno-55-16" name="__codelineno-55-16" href="#__codelineno-55-16"></a>
+<a id="__codelineno-55-17" name="__codelineno-55-17" href="#__codelineno-55-17"></a>srun<span class="w"> </span>--cpu-bind<span class="o">=</span>mask_cpu:<span class="nv">$MYMASKS</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-55-18" name="__codelineno-55-18" href="#__codelineno-55-18"></a>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-55-19" name="__codelineno-55-19" href="#__codelineno-55-19"></a><span class="w">    </span>-B<span class="w"> </span>/var/spool/slurmd<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-55-20" name="__codelineno-55-20" href="#__codelineno-55-20"></a><span class="w">    </span>-B<span class="w"> </span>/opt/cray<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-55-21" name="__codelineno-55-21" href="#__codelineno-55-21"></a><span class="w">    </span>-B<span class="w"> </span>/usr/lib64/libcxi.so.1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-55-22" name="__codelineno-55-22" href="#__codelineno-55-22"></a><span class="w">    </span>-B<span class="w"> </span><span class="nv">$PWD</span>:/workdir<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-55-23" name="__codelineno-55-23" href="#__codelineno-55-23"></a><span class="w">    </span><span class="nv">$CONTAINER</span><span class="w"> </span>/workdir/run-pytorch.sh
 </code></pre></div>
+<p>(if you get mpi4py-related error messages in some of the older containers you may have to add <code>-B /usr/lib64/libjansson.so.4</code> also.)</p>
 </li>
 </ol>
-<h3 id="known-restrictions-and-problems">Known restrictions and problems</h3>
+<h3 id="links">Links</h3>
 <ul>
-<li><code>torchrun</code> cannot be used on LUMI (and many other HPC clusters) as it uses a mechanism
-    to start tasks that does not go through the resource manager of the cluster and hence
-    if enabled could enable users to steal resources from other users on shared nodes.</li>
+<li><a href="https://lumi-supercomputer.github.io/AI-latest">Latest edition of the "Moving your AI training jobs to LUMI" workshop</a></li>
 </ul>
 <h2 id="singularity-containers-with-modules-for-binding-and-extras">Singularity containers with modules for binding and extras</h2>
 <p>Install with the EasyBuild-user module in <code>partition/container</code>:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>module load LUMI partition/container EasyBuild-user
-<a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>eb &lt;easyconfig&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>module load LUMI partition/container EasyBuild-user
+<a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>eb &lt;easyconfig&gt;
 </code></pre></div>
 The module will be available in all versions of the LUMI stack and in the CrayEnv stack.</p>
 <p>To access module help after installation use <code>module spider PyTorch/&lt;version&gt;</code>.</p>
 <p>EasyConfig:</p>
 <ul>
-<li>
-<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110.eb, will provide PyTorch/2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110</a>
-    (with <a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110-docker/">docker definition</a>)</p>
-<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
-and torchvision 0.15.2a0+fa99a53 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
-</li>
-<li>
-<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20240207/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20240207.eb, will provide PyTorch/2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20240207</a></p>
-<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
-and torchvision 0.15.2a0+fa99a53 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
-</li>
-<li>
-<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20231110/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20231110.eb, will provide PyTorch/2.0.1-rocm-5.5.1-python-3.10-singularity-20231110</a>
-    (with <a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20231110-docker/">docker definition</a>)</p>
-<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
-and torchvision 0.15.2a0+fa99a53 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
-</li>
-<li>
-<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20240207/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20240207.eb, will provide PyTorch/2.0.1-rocm-5.5.1-python-3.10-singularity-20240207</a></p>
-<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
-and torchvision 0.16.0+a90e584 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
-</li>
 <li>
 <p><a href="PyTorch-2.1.0-rocm-5.6.1-python-3.10-singularity-20231123/">EasyConfig PyTorch-2.1.0-rocm-5.6.1-python-3.10-singularity-20231123.eb, will provide PyTorch/2.1.0-rocm-5.6.1-python-3.10-singularity-20231123</a></p>
 <p>Contains PyTorch 2.1.0 with torchaudio 2.1.0+420d9ac, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036,
@@ -2563,8 +2596,8 @@ conda env, Python venv or both environments respectively.</p>
 </li>
 <li>
 <p><a href="PyTorch-2.2.2-rocm-5.6.1-python-3.10-vllm-0.4.0.post1-singularity-20240404/">EasyConfig PyTorch-2.2.2-rocm-5.6.1-python-3.10-vllm-0.4.0.post1-singularity-20240404.eb, will provide PyTorch/2.2.2-rocm-5.6.1-python-3.10-vllm-0.4.0.post1-singularity-20240404</a></p>
-<p>Contains PyTorch 2.2.0 with torchaudio 2.2.0, torchdata 0.7.1+cpu, torchtext 0.17.0+cpu,
-torchvision 0.17.0 GPU version, torchmetrics 1.3.2, DeepSpeed 0.12.3,  flash-attention 2.0.4, 
+<p>Contains PyTorch 2.2.2 with torchaudio 2.2.2, torchdata 0.7.1+cpu, torchtext 0.17.2+cpu,
+torchvision 0.17.2 GPU version, torchmetrics 1.3.2, DeepSpeed 0.12.3,  flash-attention 2.0.4, transformers 4.39.3,
 xformers 0.0.25+8dd471d.d20240209, and vllm 0.4.0.post1, on Python 3.10 and ROCm 5.6.1.
 The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
 <p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
@@ -2580,6 +2613,88 @@ xformers 0.0.26+82368ac.d20240403, and vllm 0.4.0.post1, on Python 3.10 and ROCm
 The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
 <p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
 conda env, Python venv or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.2.2-rocm-5.7.3-python-3.12-singularity-20240923/">EasyConfig PyTorch-2.2.2-rocm-5.7.3-python-3.12-singularity-20240923.eb, will provide PyTorch/2.2.2-rocm-5.7.3-python-3.12-singularity-20240923</a></p>
+<p>Contains PyTorch 2.2.2 with torchaudio 2.2.2, torchdata 0.7.1, torchtext 0.17.2+cpu,
+torchvision 0.17.2 GPU version, DeepSpeed 0.14.0,  flash-attention 2.6.3 and transformers 4.41.2,
+on Python 3.12 and ROCm 5.7.3.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.3.0-rocm-6.2.0-python-3.10-singularity-20241007/">EasyConfig PyTorch-2.3.0-rocm-6.2.0-python-3.10-singularity-20241007.eb, will provide PyTorch/2.3.0-rocm-6.2.0-python-3.10-singularity-20241007</a></p>
+<p>Contains PyTorch 2.3.0 with torchdata 0.7.1+cpu, torchtext 0.18.0+cpu,
+torchvision 0.18.0 GPU version, DeepSpeed 0.14.0,  flash-attention 2.6.3 and transformers 4.41.2, 
+on Python 3.10 and ROCm 6.2.0.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.3.1-rocm-6.0.3-python-3.12-singularity-20240923/">EasyConfig PyTorch-2.3.1-rocm-6.0.3-python-3.12-singularity-20240923.eb, will provide PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-20240923</a></p>
+<p>Contains PyTorch 2.3.1 with torchaudio 2.3.1, torchdata 0.7.1, torchtext 0.18.0+cpu,
+torchvision 0.18.1 GPU version, DeepSpeed 0.14.0,  flash-attention 2.6.3 and transformers 4.41.2,
+on Python 3.12 and ROCm 6.0.3. mpi4py 3.1.6 interfacing to Cray MPICH is also included.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.3.1-rocm-6.0.3-python-3.12-singularity-exampleVenv-20240923/">EasyConfig PyTorch-2.3.1-rocm-6.0.3-python-3.12-singularity-exampleVenv-20240923.eb, will provide PyTorch/2.3.1-rocm-6.0.3-python-3.12-singularity-exampleVenv-20240923</a></p>
+<p>Contains PyTorch 2.3.1 with torchaudio 2.3.1, torchdata 0.7.1, torchtext 0.18.0+cpu,
+torchvision 0.18.1 GPU version, DeepSpeed 0.14.0,  flash-attention 2.6.3 and transformers 4.41.2,
+on Python 3.12 and ROCm 6.0.3. mpi4py 3.1.6 interfacing to Cray MPICH is also included.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.4.1-rocm-6.1.3-python-3.12-singularity-20241007/">EasyConfig PyTorch-2.4.1-rocm-6.1.3-python-3.12-singularity-20241007.eb, will provide PyTorch/2.4.1-rocm-6.1.3-python-3.12-singularity-20241007</a></p>
+<p>Contains PyTorch 2.4.1 with torchaudio 2.4.1, torchdata 0.8.0+cpu, torchtext 0.18.0+cpu,
+torchvision 0.19.1 GPU version, DeepSpeed 0.15.1,  flash-attention 2.6.3, transformers 4.45.1 and
+xformers 0.0.28+f37fb3d7.d20241001, on Python 3.12 and ROCm 6.1.3.
+mpi4py 3.1.6 interfacing to Cray MPICH is also included.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.4.1-rocm-6.1.3-python-3.12-singularity-20241125/">EasyConfig PyTorch-2.4.1-rocm-6.1.3-python-3.12-singularity-20241125.eb, will provide PyTorch/2.4.1-rocm-6.1.3-python-3.12-singularity-20241125</a></p>
+<p>Contains PyTorch 2.4.1 with torchaudio 2.4.1, torchdata 0.8.0+cpu, torchtext 0.18.0+cpu,
+torchvision 0.19.1 GPU version, DeepSpeed 0.15.1,  flash-attention 2.6.3, transformers 4.46.3 and
+xformers 0.0.28+f37fb3d7.d20241001, on Python 3.12 and ROCm 6.1.3.
+mpi4py 3.1.6 interfacing to Cray MPICH is also included.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.5.1-rocm-6.2.3-python-3.12-singularity-20241125/">EasyConfig PyTorch-2.5.1-rocm-6.2.3-python-3.12-singularity-20241125.eb, will provide PyTorch/2.5.1-rocm-6.2.3-python-3.12-singularity-20241125</a></p>
+<p>Contains PyTorch 2.5.1 with torchaudio 2.5.1, torchdata 0.9.0+cpu, torchtext 0.18.0+cpu,
+torchvision 0.20.1 GPU version, DeepSpeed 0.15.1,  flash-attention 2.6.3, transformers 4.46.3,
+xformers 0.0.28+06b548c0.d20241106 and vllm 0.6.3.post2+rocm624, on Python 3.12 and ROCm 6.2.3.
+mpi4py 3.1.6 interfacing to Cray MPICH is also included.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-20240801-rocm-6.2.0-python-3.12-vllm-c7a3a47-singularity-20241007/">EasyConfig PyTorch-20240801-rocm-6.2.0-python-3.12-vllm-c7a3a47-singularity-20241007.eb, will provide PyTorch/20240801-rocm-6.2.0-python-3.12-vllm-c7a3a47-singularity-20241007</a></p>
+<p>Contains PyTorch 2.5.0a0+gitf0da167 with torchvision 0.20.0a0+61bd547, vllm 0.4.3+rocm624, flash-attention 2.5.9.post1 and
+transformers 4.44.2, on Python 3.12 and ROCm 6.2.0.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
+</li>
+<li>
+<p><a href="PyTorch-20240918-rocm-6.2.1-python-3.12-vllm-4075b35-singularity-20241007/">EasyConfig PyTorch-20240918-rocm-6.2.1-python-3.12-vllm-4075b35-singularity-20241007.eb, will provide PyTorch/20240918-rocm-6.2.1-python-3.12-vllm-4075b35-singularity-20241007</a></p>
+<p>Contains 2.6.0.dev20240918+rocm6.2 with torchvision 0.20.0.dev20240918+rocm6.2, vllm 0.6.3.dev3+g4075b35b.d20241004.rocm624, flash-attention 2.6.3 and
+transformers 4.44.2, on Python 3.12 and ROCm 6.2.0.
+The container also fully assists the procedure to add extra packages in a Python virtual environment.</p>
+<p>This version works with $WITH_CONDA, $WITH_VENV and $WITH_CONDA_VENV for initialisation of the 
+conda / Python venv / or both environments respectively.</p>
 </li>
 </ul>
 <h2 id="technical-documentation-user-easybuild-installation">Technical documentation (user EasyBuild installation)</h2>
@@ -2628,7 +2743,7 @@ conda env, Python venv or both environments respectively.</p>
 </li>
 <li>
 <p>To find the version of Python packages,</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list&#39;
 </code></pre></div>
 <p>after loading the module. This can even be done on the login nodes.
 It will return information about all Python packages.</p>
@@ -2644,11 +2759,11 @@ It will return information about all Python packages.</p>
 </li>
 <li>
 <p>Finding the version:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list | grep deepspeed&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list | grep deepspeed&#39;
 </code></pre></div>
 <p>or the clumsy way without <code>pip</code>: </p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>singularity exec $SIF bash -c \
-<a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>  &#39;grep &quot;version=&quot; /opt/miniconda3/envs/pytorch/lib/python3.10/site-packages/deepspeed/git_version_info_installed.py&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>singularity exec $SIF bash -c \
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a>  &#39;grep &quot;version=&quot; /opt/miniconda3/envs/pytorch/lib/python3.10/site-packages/deepspeed/git_version_info_installed.py&#39;
 </code></pre></div>
 <p>(Test can be done after loading the module on a login node.)</p>
 </li>
@@ -2664,21 +2779,21 @@ It will return information about all Python packages.</p>
 </li>
 <li>
 <p>To find the version:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list | grep flash-attn&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list | grep flash-attn&#39;
 </code></pre></div>
 <p>or the clumsy way without `pip:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>singularity exec $SIF bash -c \
-<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>  &#39;grep &quot;__version__&quot; /opt/miniconda3/envs/pytorch/lib/python3.10/site-packages/flash_attn/__init__.py&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>singularity exec $SIF bash -c \
+<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a>  &#39;grep &quot;__version__&quot; /opt/miniconda3/envs/pytorch/lib/python3.10/site-packages/flash_attn/__init__.py&#39;
 </code></pre></div>
 <p>(Test can be done after loading the module on a login node.)</p>
 </li>
 </ul>
 <p>To run a benchmark:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>srun -N 1 -n 1 \
-<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>  --cpu-bind=mask_cpu:0xfe000000000000,0xfe00000000000000,0xfe0000,0xfe000000,0xfe,0xfe00,0xfe00000000,0xfe0000000000 \
-<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a>  --gpus 8 \
-<a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a>  singularity exec $SIF /runscripts/conda-python-simple \
-<a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a>  -u /opt/wheels/flash_attn-benchmarks/benchmark_flash_attention.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a>srun -N 1 -n 1 \
+<a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a>  --cpu-bind=mask_cpu:0xfe000000000000,0xfe00000000000000,0xfe0000,0xfe000000,0xfe,0xfe00,0xfe00000000,0xfe0000000000 \
+<a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a>  --gpus 8 \
+<a id="__codelineno-62-4" name="__codelineno-62-4" href="#__codelineno-62-4"></a>  singularity exec $SIF /runscripts/conda-python-simple \
+<a id="__codelineno-62-5" name="__codelineno-62-5" href="#__codelineno-62-5"></a>  -u /opt/wheels/flash_attn-benchmarks/benchmark_flash_attention.py
 </code></pre></div>
 </li>
 <li>
@@ -2690,17 +2805,17 @@ It will return information about all Python packages.</p>
 </li>
 <li>
 <p>To find the version:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list | grep xformers&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; pip list | grep xformers&#39;
 </code></pre></div>
 <p>or the clumsy way without <code>pip</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>singularity exec $SIF bash -c \
-<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a>  &#39;grep &quot;__version__&quot; /opt/miniconda3/envs/pytorch/lib/python3.10/site-packages/xformers/version.py&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a>singularity exec $SIF bash -c \
+<a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a>  &#39;grep &quot;__version__&quot; /opt/miniconda3/envs/pytorch/lib/python3.10/site-packages/xformers/version.py&#39;
 </code></pre></div>
 <p>(Test can be done after loading the module on a login node.)</p>
 </li>
 <li>
 <p>Checking the features of <code>xformers</code>: </p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; python -m xformers.info&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a>singularity exec $SIF bash -c &#39;$WITH_CONDA ; python -m xformers.info&#39;
 </code></pre></div>
 </li>
 </ul>
@@ -2713,8 +2828,39 @@ archived ones are unsupported. They are still provided as a source of informatio
 should you need this, e.g., to understand the configuration that was used for
 earlier work on the system.</p>
 <ul>
-<li>Archived EasyConfigs from <a href="https://github.com/lumi-supercomputer/LUMI-EasyBuild-contrib/blob/main/easybuild/easyconfigs/__archive__/p/PyTorch">LUMI-EasyBuild-contrib</a> - previously user-installable software<ul>
+<li>
+<p>Archived EasyConfigs from <a href="https://github.com/lumi-supercomputer/LUMI-EasyBuild-contrib/blob/main/easybuild/easyconfigs/__archive__/p/PyTorch">LUMI-EasyBuild-contrib</a> - previously user-installable software</p>
+<ul>
 <li><a href="PyTorch-1.12.1-cpeGNU-22.08/">EasyConfig PyTorch-1.12.1-cpeGNU-22.08.eb, with module PyTorch/1.12.1-cpeGNU-22.08</a></li>
+</ul>
+</li>
+<li>
+<p>Archived EasyConfigs from <a href="https://github.com/lumi-supercomputer/LUMI-EasyBuild-containers/blob/main/easybuild/easyconfigs/__archive__/p/PyTorch">LUMI-EasyBuild-containers</a> - previously available singularity containerised software</p>
+<ul>
+<li>
+<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110.eb, with module PyTorch/2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110</a>
+ (with <a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20231110-docker.md">docker definition</a>)</p>
+<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
+and torchvision 0.15.2a0+fa99a53 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20240207/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20240207.eb, with module PyTorch/2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20240207</a>
+ (with <a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-debugsymbols-singularity-20240207-docker.md">docker definition</a>)</p>
+<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
+and torchvision 0.15.2a0+fa99a53 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20231110/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20231110.eb, with module PyTorch/2.0.1-rocm-5.5.1-python-3.10-singularity-20231110</a>
+ (with <a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20231110-docker.md">docker definition</a>)</p>
+<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
+and torchvision 0.15.2a0+fa99a53 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
+</li>
+<li>
+<p><a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20240207/">EasyConfig PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20240207.eb, with module PyTorch/2.0.1-rocm-5.5.1-python-3.10-singularity-20240207</a>
+ (with <a href="PyTorch-2.0.1-rocm-5.5.1-python-3.10-singularity-20240207-docker.md">docker definition</a>)</p>
+<p>Contains PyTorch 2.0.1 with torchaudio 2.0.2+31de77d, torchdata 0.6.1+e1feeb2, torchtext 0.15.2a0+4571036
+and torchvision 0.16.0+a90e584 GPU version, on Python 3.10 and ROCm 5.5.1.</p>
+</li>
 </ul>
 </li>
 </ul>

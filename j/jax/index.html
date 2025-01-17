@@ -1394,19 +1394,43 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#user-documentation" class="md-nav__link">
+  <a href="#user-documentation-singularity-container" class="md-nav__link">
     <span class="md-ellipsis">
-      User documentation
+      User documentation (singularity container)
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="User documentation">
+    <nav class="md-nav" aria-label="User documentation (singularity container)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-via-easybuild-generated-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use via EasyBuild-generated modules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use via EasyBuild-generated modules">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       Installation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-access-use-without-the-container-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direct access (use without the container module)
     </span>
   </a>
   
@@ -1453,7 +1477,7 @@
 <p><a href="../../">[package list]</a></p>
 <h1 id="jax">jax</h1>
 <p><span class='lumi-software-button-container-hover'><span class='lumi-software-button-container'></span></span></p>
-<h2 id="user-documentation">User documentation</h2>
+<h2 id="user-documentation-singularity-container">User documentation (singularity container)</h2>
 <p>The JAX container is developed by AMD specifically for LUMI and contains the
 necessary parts to run JAX on LUMI, including the plugin needed for RCCL when
 doing distributed AI, and a suitable version of ROCm for the version of JAX.</p>
@@ -1463,6 +1487,7 @@ guarantee that this container will work for you (even though it did pass some
 tests we did), and there might be problems that cannot be fixed by the
 support team. This is software for users with a development spirit, not
 for users who expect something that simply and always works.</strong></p>
+<h3 id="use-via-easybuild-generated-modules">Use via EasyBuild-generated modules</h3>
 <p>The EasyBuild installation with the EasyConfigs mentioned below will do four things:</p>
 <ol>
 <li>
@@ -1484,16 +1509,16 @@ is however at your own risk. </p>
     different version in your job scripts.</p>
 <ul>
 <li>
-<p><code>SIF</code> and <code>SIFPYTORCH</code> both contain the name and full path of the singularity
+<p><code>SIF</code> and <code>SIFJAX</code> both contain the name and full path of the singularity
     container file.</p>
 </li>
 <li>
-<p><code>SINGULARITY_BINDPATH</code> will mount all necessary directories from the system,
+<p><code>SINGULARITY_BIND</code> will mount all necessary directories from the system,
     including everything that is needed to access the project, scratch and flash
     file systems.</p>
 </li>
 <li>
-<p><code>RUNSCRIPTS</code> and <code>RUNSCRIPTSPYTORCH</code> contain the full path of the directory
+<p><code>RUNSCRIPTS</code> and <code>RUNSCRIPTSJAX</code> contain the full path of the directory
     containing some sample run scripts that can be used to run software in the 
     container, or as inspiration for your own variants.</p>
 </li>
@@ -1536,7 +1561,7 @@ with the command that is available in the container as the environment variable
 <code>source /opt/miniconda3/bin/activate jax</code>).</p>
 <p>Example of the use of <code>WITH_CONDA</code>: Check the Python packages in the container
 in an interactive session:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>module load LUMI jax/0.4.13-rocm-5.6.1-python-3.10-singularity-20240207
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>module load LUMI jax/0.4.28-rocm-6.2.0-python-3.12-singularity-20241007
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>singularity shell $SIF
 </code></pre></div>
 <p>which takes you in the container, and then in the container, at the <code>Singularity&gt;</code> 
@@ -1545,10 +1570,10 @@ prompt:</p>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip list
 </code></pre></div>
 <p>An example of the use of <code>start-shell</code> that even works on the login nodes is:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>module load LUMI jax/0.4.13-rocm-5.6.1-python-3.10-singularity-20240207
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>module load LUMI jax/0.4.28-rocm-6.2.0-python-3.12-singularity-20241007
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>start-shell -c &#39;/runscripts/conda-python-simple -c &quot;import numpy ; import scipy ; import jax ; print( f&#39;&quot;&#39;JAX {jax.__version__}, NumPy {numpy.__version__}, SciPy {scipy.__version__}.&#39;&quot;&#39; )&quot;&#39;
 </code></pre></div>
-<p>The container (when used with <code>SINGULARITY_BINDPATH</code> of the module) also provides
+<p>The container (when used with <code>SINGULARITY_BIND</code> of the module) also provides
 one or more wrapper scripts to start Python from the
 conda environment in the container. Those scripts are also available outside the 
 container for inspection after loading the module in the 
@@ -1556,26 +1581,57 @@ container for inspection after loading the module in the
 of inspiration to develop a script that more directly executes your commands or
 does additional initialisations.</p>
 <p>Example (in an interactive session):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>salloc -N1 -pstandard-g -t 30:00
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>module load LUMI jax/0.4.13-rocm-5.6.1-python-3.10-singularity-20240207
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>salloc -N1 -pstandard-g -t 10:00
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>module load LUMI jax/0.4.28-rocm-6.2.0-python-3.12-singularity-20241007
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>srun -N1 -n1 --gpus 8 singularity exec $SIF /runscripts/conda-python-simple \
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    -c &#39;import jax; print(&quot;I have these devices:&quot;, jax.devices(&quot;gpu&quot;))&#39;
 </code></pre></div>
-<h3 id="installation">Installation</h3>
+<h4 id="installation">Installation</h4>
 <p>To install the container with EasyBuild, follow the instructions in the
 <a href="https://docs.lumi-supercomputer.eu/software/installing/easybuild/">EasyBuild section of the LUMI documentation, section "Software"</a>,
 and use the dummy partition <code>container</code>, e.g.:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>module load LUMI partition/container EasyBuild-user
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>eb jax-0.4.13-rocm-5.6.1-python-3.10-singularity-20240207.eb
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>eb jax-0.4.28-rocm-6.2.0-python-3.12-singularity-20241007.eb
 </code></pre></div>
 <p>To use the container after installation, the <code>EasyBuild-user</code> module is not needed nor
 is the <code>container</code> partition. The module will be available in all versions of the LUMI stack
 and in <a href="https://docs.lumi-supercomputer.eu/runjobs/lumi_env/softwarestacks/#crayenv">the <code>CrayEnv</code> stack</a>
 (provided the environment variable <code>EBU_USER_PREFIX</code> points to the right location).</p>
+<h3 id="direct-access-use-without-the-container-module">Direct access (use without the container module)</h3>
+<p>The jax containers are available in the following subdirectories of <code>/appl/local/containers</code>:</p>
+<ul>
+<li>
+<p><code>/appl/local/containers/sif-images</code>: Symbolic link to the latest version of the container
+    for each ROCm version provided. Those links can change without notice!</p>
+</li>
+<li>
+<p><code>/appl/local/containers/tested-containers</code>: Tested containers provided as a Singulartiy <code>.sif</code> file
+    and a docker-generated tarball. Containers in this directory are removed quickly when a new version
+    becomes available.</p>
+</li>
+<li>
+<p><code>/appl/local/containers/easybuild-sif-images</code>: Singularity <code>.sif</code> images used with the EasyConfigs
+    that we provide. They tend to be available for a longer time than in the other two subdirectories.</p>
+</li>
+</ul>
+<p>If you depend on a particular version of a container, we recommend that you copy the container to
+your own file space (e.g., in <code>/project</code>) as there is no guarantee the specific version will remain
+available centrally on the system for as long as you want.</p>
+<p>When using the containers without the modules, you will have to take care of the bindings as some
+system files are needed for, e.g., MPI. The recommended minimal bindings are:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>-B /var/spool/slurmd,/opt/cray/,/usr/lib64/libcxi.so.1
+</code></pre></div>
+<p>and the bindings you need to access the files you want to use from <code>/scratch</code>, <code>/flash</code> and/or <code>/project</code>.
+You can get access to your files on LUMI in the regular location by also using the bindings</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>-B /pfs,/scratch,/projappl,/project,/flash,/appl
+</code></pre></div>
+<p>Note that the list recommended bindings may change after a system update or between 
+different containers. We do try to keep the EasyBuild recipes for the modules 
+up-to-date though to reflect those changes.</p>
 <h2 id="singularity-containers-with-modules-for-binding-and-extras">Singularity containers with modules for binding and extras</h2>
 <p>Install with the EasyBuild-user module in <code>partition/container</code>:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>module load LUMI partition/container EasyBuild-user
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>eb &lt;easyconfig&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>module load LUMI partition/container EasyBuild-user
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>eb &lt;easyconfig&gt;
 </code></pre></div>
 The module will be available in all versions of the LUMI stack and in the CrayEnv stack.</p>
 <p>To access module help after installation use <code>module spider jax/&lt;version&gt;</code>.</p>
@@ -1588,6 +1644,10 @@ The module will be available in all versions of the LUMI stack and in the CrayEn
 <li>
 <p><a href="jax-0.4.13-rocm-5.6.1-python-3.10-singularity-20240207/">EasyConfig jax-0.4.13-rocm-5.6.1-python-3.10-singularity-20240207.eb, will provide jax/0.4.13-rocm-5.6.1-python-3.10-singularity-20240207</a></p>
 <p>Contains JAX 0.4.13 with NumPy 1.26.3 and SciPy 1.12.0.</p>
+</li>
+<li>
+<p><a href="jax-0.4.28-rocm-6.2.0-python-3.12-singularity-20241007/">EasyConfig jax-0.4.28-rocm-6.2.0-python-3.12-singularity-20241007.eb, will provide jax/0.4.28-rocm-6.2.0-python-3.12-singularity-20241007</a></p>
+<p>Contains JAX 0.4.28 with NumPy 1.26.4, SciPy 1.14.1 and pandas 2.2.2.</p>
 </li>
 </ul>
 <h2 id="archived-easyconfigs">Archived EasyConfigs</h2>

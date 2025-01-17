@@ -1474,7 +1474,7 @@ is however at your own risk. </p>
     container file.</p>
 </li>
 <li>
-<p><code>SINGULARITY_BINDPATH</code> will mount all necessary directories from the system,
+<p><code>SINGULARITY_BIND</code> will mount all necessary directories from the system,
     including everything that is needed to access the project, scratch and flash
     file systems.</p>
 </li>
@@ -1499,7 +1499,7 @@ That environment needs to be activated in the container when running, which can 
 with the command that is available in the container as the environment variable
 <code>WITH_CONDA</code> (which for this container is
 <code>source /opt/miniconda3/bin/activate alphafold</code>).</p>
-<p>The container (when used with <code>SINGULARITY_BINDPATH</code> of the module) also provides
+<p>The container (when used with <code>SINGULARITY_BIND</code> of the module) also provides
 the wrapper script <code>/runscripts/conda-python-simple</code> to start the Python command from the
 conda environment in the container. That script is also available outside the 
 container for inspection after loading the module as

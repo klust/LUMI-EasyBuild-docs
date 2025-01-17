@@ -1422,6 +1422,48 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#some-interactive-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Some interactive examples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Some interactive examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gpu_check" class="md-nav__link">
+    <span class="md-ellipsis">
+      gpu_check
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hpcat-on-a-gpu-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      hpcat on a GPU node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serial_check-omp_check-mpi_cehck-and-hybrid_check" class="md-nav__link">
+    <span class="md-ellipsis">
+      serial_check, omp_check, mpi_cehck and hybrid_check
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#acknowledgements" class="md-nav__link">
     <span class="md-ellipsis">
       Acknowledgements
@@ -1486,6 +1528,15 @@
   <a href="#version-11" class="md-nav__link">
     <span class="md-ellipsis">
       Version 1.1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version 1.2
     </span>
   </a>
   
@@ -1572,6 +1623,11 @@
 and licensed under the GNU General Public License version 3.0, a copy of
 which can be found in the
 <a href="https://github.com/Lumi-supercomputer/lumi-CPEtools/blob/main/LICENSE">LICENSE file in the source repository</a>.</p>
+<p>The <code>hpcat</code> tool included in the module is developed by HPE and licensed under an MIT-style
+license which can be found in the
+<a href="https://github.com/HewlettPackard/hpcat/blob/main/LICENSE">LICENSE file in the source repository</a>.</p>
+<p>After loading the module, both license files are available in their respective subdirectories 
+in <code>$EBROOTLUMIMINCPETOOLS/share/licenses</code>.</p>
 <h2 id="user-documentation-central-installation">User documentation (central installation)</h2>
 <h3 id="getting-help">Getting help</h3>
 <p>The tools in <code>lumi-CPETtools</code> are documented through manual pages that can be viewed on LUMI
@@ -1598,9 +1654,59 @@ after loading the module. Start with <code>man lumi-CPEtools</code>.</p>
 <p><code>gpu_check</code> (from version 1.1 on): A  hybrid MPI/OpenMP program that prints information about thread and GPU binding/mapping on Cray EX Bardpeak nodes as in
     LUMI-G, based on the ORNL hello_jobstep program.  (AMD GPU nodes only)</p>
 </li>
+<li>
+<p><code>hpcat</code> (from version 1.2 on): Another HPC Affinity Tracker program. This program 
+    is <a href="https://github.com/HewlettPackard/hpcat">developed by HPE</a> and shows for 
+    each MPI rank the core(s) that will be used (and per thread if <code>OMP_NUM_THREADS</code>
+    is set), which GPU(s) are accessible to the task and which network adapter will be
+    used, indicating the NUMA domain for each so that one can easily check if the resource
+    mapping is ideal.</p>
+</li>
 </ul>
 <p>The various <code>*_check</code> programs are designed to test CPU and GPU binding in Slurm and 
 are the LUST recommended way to experiment with those bindings.</p>
+<h3 id="some-interactive-examples">Some interactive examples</h3>
+<p>The examples assume the appropriate software stack modules and <code>lumi-CPEtools</code> module
+are loaded. The examples show one version of modules, but can work with others too.
+You'll also need to add the appropriate <code>-A</code> flag to the <code>salloc</code> commands.</p>
+<h4 id="gpu_check"><code>gpu_check</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>salloc -N2 -pstandard-g -G 16 -t 10:00
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>module load LUMI/24.03 partition/G lumi-CPEtools/1.2-cpeGNU-24.03
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>srun -n16 -c7 bash -c &#39;ROCR_VISIBLE_DEVICES=$SLURM_LOCALID gpu_check -l&#39;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>srun -n16 -c7 \
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    --cpu-bind=mask_cpu:0xfe000000000000,0xfe00000000000000,0xfe0000,0xfe000000,0xfe,0xfe00,0xfe00000000,0xfe0000000000 \
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    bash -c &#39;ROCR_VISIBLE_DEVICES=$SLURM_LOCALID gpu_check -l&#39;
+</code></pre></div>
+<p>Note that in the first <code>srun</code> command, the mapping of GPU binding is not optimal while 
+in the second <code>srunz</code> command it is.</p>
+<h4 id="hpcat-on-a-gpu-node"><code>hpcat</code> on a GPU node</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>salloc -N2 -pstandard-g -G 16 -t 10:00
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>module load LUMI/24.03 partition/G lumi-CPEtools/1.2-cpeGNU-24.03
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>srun -n16 -c7 bash -c &#39;ROCR_VISIBLE_DEVICES=$SLURM_LOCALID OMP_NUM_THREADS=7 hpcat&#39;
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>srun -n16 -c7 \
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    --cpu-bind=mask_cpu:0xfe000000000000,0xfe00000000000000,0xfe0000,0xfe000000,0xfe,0xfe00,0xfe00000000,0xfe0000000000 \
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    bash -c &#39;ROCR_VISIBLE_DEVICES=$SLURM_LOCALID OMP_NUM_THREADS=7 hpcat&#39;
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>srun -n16 -c7 \
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    --cpu-bind=mask_cpu:0xfe000000000000,0xfe00000000000000,0xfe0000,0xfe000000,0xfe,0xfe00,0xfe00000000,0xfe0000000000 \
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    bash -c &#39;ROCR_VISIBLE_DEVICES=$SLURM_LOCALID OMP_NUM_THREADS=7 OMP_PLACES=cores hpcat&#39;
+</code></pre></div>
+<p>Note that in the first <code>srun</code> command, the mapping of resources is not very good. GPUs 
+don't map to their closest chiplet, and the network adapters are also linked based 
+on the CPU NUMA domain. In the second case, the mapping is optimal, but except for the
+Cray compilers, the OpenMP threads can still move in the chiplet. In the last case, these 
+are also fixed with all compilers.</p>
+<h4 id="serial_check-omp_check-mpi_cehck-and-hybrid_check"><code>serial_check</code>, <code>omp_check</code>, <code>mpi_cehck</code> and <code>hybrid_check</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>salloc -N1 -pstandard -t 10:00
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>module load LUMI/24.03 partition/C lumi-CPEtools/1.2-cpeGNU-24.03
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>srun -n1 -c1 serial_check
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>srun -n1 -c4 omp_check
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>srun -n4 -c1 mpi_check
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>srun -n4 -c4 hybrid_check
+</code></pre></div>
+<p>One big difference between these tools and <code>hpcat</code> is that this tool shows on which 
+core a thread is running at the moment that this is measured, while <code>hpcat</code> actually 
+shows the affinity mask, i.e., all cores that can be used by that thread. <code>gpu_check</code>
+has the same limitation as <code>omp_check</code> etc.</p>
 <h3 id="acknowledgements">Acknowledgements</h3>
 <p>The code for <code>hybrid_check</code> and its offsprings <code>serial_check</code>, <code>omp_check</code> and <code>mpi_check</code> is inspired
 by the <a href="https://support.hpe.com/hpesc/public/docDisplay?docId=a00114008en_us&amp;docLocale=en_US&amp;page=Run_an_OpenMP_Application.html"><code>xthi</code> program used in the 4-day LUMI comprehensive courses</a>.
@@ -1612,6 +1718,9 @@ The program is specifically for the HPE Cray EX Bard Peak nodes and will not wor
 without reworking on other AMD GPU systems or on NVIDIA GPU systems.</p>
 <p>The <code>lumi-CPEtools</code> code is developed by LUST in the 
 <a href="https://github.com/Lumi-supercomputer/lumi-CPEtools">lumi-CPEtools repository on the LUMI supercomputer GitHub</a>.</p>
+<p>The <code>hpcat</code> program (lumi-CPEtools 1.2 and later) is
+<a href="https://github.com/HewlettPackard/hpcat">developed by HPE</a> and provided
+unmodified.</p>
 <h2 id="pre-installed-modules-and-easyconfigs">Pre-installed modules (and EasyConfigs)</h2>
 <p>To access module help and find out for which stacks and partitions the module is
 installed, use <code>module spider lumi-CPEtools/&lt;version&gt;</code>.</p>
@@ -1669,6 +1778,9 @@ installed, use <code>module spider lumi-CPEtools/&lt;version&gt;</code>.</p>
 <p><a href="lumi-CPEtools-1.1-cpeAMD-23.12/">lumi-CPEtools/1.1-cpeAMD-23.12 (EasyConfig: lumi-CPEtools-1.1-cpeAMD-23.12.eb)</a></p>
 </li>
 <li>
+<p><a href="lumi-CPEtools-1.1-cpeAMD-23.12.noGit.good/">lumi-CPEtools/1.1-cpeAMD-23.12.noGit.good (EasyConfig: lumi-CPEtools-1.1-cpeAMD-23.12.noGit.good.eb)</a></p>
+</li>
+<li>
 <p><a href="lumi-CPEtools-1.1-cpeAMD-24.03/">lumi-CPEtools/1.1-cpeAMD-24.03 (EasyConfig: lumi-CPEtools-1.1-cpeAMD-24.03.eb)</a></p>
 </li>
 <li>
@@ -1710,10 +1822,22 @@ installed, use <code>module spider lumi-CPEtools/&lt;version&gt;</code>.</p>
 <li>
 <p><a href="lumi-CPEtools-1.1-cpeGNU-24.03/">lumi-CPEtools/1.1-cpeGNU-24.03 (EasyConfig: lumi-CPEtools-1.1-cpeGNU-24.03.eb)</a></p>
 </li>
+<li>
+<p><a href="lumi-CPEtools-1.2-cpeAMD-24.03/">lumi-CPEtools/1.2-cpeAMD-24.03 (EasyConfig: lumi-CPEtools-1.2-cpeAMD-24.03.eb)</a></p>
+</li>
+<li>
+<p><a href="lumi-CPEtools-1.2-cpeAOCC-24.03/">lumi-CPEtools/1.2-cpeAOCC-24.03 (EasyConfig: lumi-CPEtools-1.2-cpeAOCC-24.03.eb)</a></p>
+</li>
+<li>
+<p><a href="lumi-CPEtools-1.2-cpeCray-24.03/">lumi-CPEtools/1.2-cpeCray-24.03 (EasyConfig: lumi-CPEtools-1.2-cpeCray-24.03.eb)</a></p>
+</li>
+<li>
+<p><a href="lumi-CPEtools-1.2-cpeGNU-24.03/">lumi-CPEtools/1.2-cpeGNU-24.03 (EasyConfig: lumi-CPEtools-1.2-cpeGNU-24.03.eb)</a></p>
+</li>
 </ul>
 <h2 id="user-installable-modules-and-easyconfigs">User-installable modules (and EasyConfigs)</h2>
 <p>Install with the EasyBuild-user module:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>eb &lt;easyconfig&gt; -r
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>eb &lt;easyconfig&gt; -r
 </code></pre></div>
 To access module help after installation and get reminded for which stacks and partitions the module is
 installed, use <code>module spider lumi-CPEtools/&lt;version&gt;</code>.</p>
@@ -1729,7 +1853,12 @@ installed, use <code>module spider lumi-CPEtools/&lt;version&gt;</code>.</p>
 <h2 id="technical-documentation-central-installation">Technical documentation (central installation)</h2>
 <p>lumi-CPEtools is developed by the LUST team.</p>
 <ul>
-<li><a href="https://github.com/Lumi-supercomputer/lumi-CPEtools">lumi-CPEtools on GitHub</a></li>
+<li>
+<p><a href="https://github.com/Lumi-supercomputer/lumi-CPEtools">lumi-CPEtools on GitHub</a></p>
+</li>
+<li>
+<p>The <a href="https://github.com/HewlettPackard/hpcat">hpcat utility from HPE</a> on GitHub</p>
+</li>
 </ul>
 <h3 id="easybuild">EasyBuild</h3>
 <p>The EasyConfig is our own development as this is also our own tool. We provide full
@@ -1770,6 +1899,49 @@ for the CrayEnv software stack.</p>
 <li>
 <p>It looks like the compiler wrappers have changed in 24.03 as unloading the accelerator
     target module in the cpeAMD version was no longer needed.</p>
+</li>
+</ul>
+<h4 id="version-12">Version 1.2</h4>
+<ul>
+<li>
+<p>Transformed the EasyConfig from version 1.1 to a Bundle to be able to add <code>hpcat</code> 
+    using its own installation procedure.</p>
+</li>
+<li>
+<p>Building <code>hpcat</code>: </p>
+<ul>
+<li>
+<p>LUMI lacks the <code>hwloc-devel</code> package so we simply copied the header files from another system
+    and download them from LUMI-O.</p>
+</li>
+<li>
+<p>The Makefile was modified to integrate better with EasyBuild and to work around a problem with
+    finding the <code>hwloc</code> library on LUMI. </p>
+<p>Rather than writing a new Makefile or a patch, we actually used a number of <code>sed</code> commands to edit
+the Makefile:</p>
+<ul>
+<li><code>mpicc</code> was replaced with <code>$(CC)</code> so that the wrappers are used instead.</li>
+<li><code>-O3</code> was replaced with <code>$(CFLAGS)</code> to pick up the options from EasyBuild</li>
+<li>'-fopenmp' is managed by the Makefile though and not by EasyBuild. On one hand because the
+    ultimate goal is to integrate with another packages that sometimes needs and sometimes does not
+    need the OpenMP flags, on the other hand to use <code>$(CFLAGS)</code> also for <code>hipcc</code>.</li>
+<li><code>-lhwloc</code> is replaced with <code>-Wl,/usr/lib64/libhwloc.so.15</code>. We had to do this through <code>-Wl</code> as
+    the <code>hipcc</code> driver thought this was a source file.</li>
+<li>As '-L.' is not needed, it is omitted.</li>
+</ul>
+</li>
+<li>
+<p>As there is no <code>make install</code>, we simply use the <code>MakeCp</code> EasyBlock, doing the edits to the Makefile in
+    <code>prebuiltopts</code>.</p>
+<p>Not that we copy the <code>libhip.so</code> file to the <code>lib</code> directory as that is the conventional 
+place to store shared objects, but it is not found there by <code>hpcat</code>, so we also create a
+symbolic link to it in the <code>bin</code> subidrecitory.</p>
+</li>
+<li>
+<p>Note that the accelerator target module should not be loaded when using the wrappers as the OpenMP offload
+    options cause a problem in one of the header files used.</p>
+</li>
+</ul>
 </li>
 </ul>
 <h2 id="technical-documentation-user-easybuild-installation">Technical documentation (user EasyBuild installation)</h2>

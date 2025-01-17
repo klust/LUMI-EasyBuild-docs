@@ -1408,97 +1408,108 @@
 To access module help after installation and get reminded for which stacks and partitions the module is
 installed, use <code>module spider singularity-bindings/24.03</code>.</p>
 <p>EasyConfig:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">easyblock</span> <span class="o">=</span> <span class="s1">&#39;Bundle&#39;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">local_craympich_version</span> <span class="o">=</span> <span class="s1">&#39;8.1.29&#39;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">local_craympich_gnutoolchain</span> <span class="o">=</span> <span class="s1">&#39;12.3&#39;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">local_libfabric_version</span> <span class="o">=</span> <span class="s1">&#39;1.15.2.0&#39;</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;singularity-bindings&#39;</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">local_LUMI_version</span> <span class="o">=</span>        <span class="s1">&#39;24.03&#39;</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">version</span> <span class="o">=</span> <span class="n">local_LUMI_version</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">homepage</span> <span class="o">=</span> <span class="s1">&#39;https://www.sylabs.io/&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Bindings for the AI containers in /appl/local/containers for containers that were</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># released while 24.03 is/was the main programming environment on the system.</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">easyblock</span> <span class="o">=</span> <span class="s1">&#39;Bundle&#39;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">local_craympich_version</span> <span class="o">=</span> <span class="s1">&#39;8.1.29&#39;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">local_craympich_gnutoolchain</span> <span class="o">=</span> <span class="s1">&#39;12.3&#39;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">local_libfabric_version</span> <span class="o">=</span> <span class="s1">&#39;1.15.2.0&#39;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;singularity-bindings&#39;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">local_LUMI_version</span> <span class="o">=</span>        <span class="s1">&#39;24.03&#39;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">version</span> <span class="o">=</span> <span class="n">local_LUMI_version</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">whatis</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="s1">&#39;Description: Bindings to let singularity containers use the cray-mpich libraries on the system&#39;</span>    
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">]</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s2">Singularity is a portable application stack packaging and runtime utility.</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s2">This module provides the MPI support for singularity containers based</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s2">on MPICH versions which are ABI-compatible with cray-mpich.</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s2">Singularity on LUMI is provided in the base OS images, so no module needs</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s2">to be loaded to just use singularity. This module sets SINGULARTY_BIND and</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="s2">SINGULARITYENV_LD_LIBRARY_PATH to enable containers that use an MPICH </span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="s2">version that is ABI compatible with cray-mpich to use the cray-mpich</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="s2">libraries provided on LUMI for optimal performance on the interconnect</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="s2">of LUMI.</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="n">toolchain</span> <span class="o">=</span> <span class="n">SYSTEM</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">homepage</span> <span class="o">=</span> <span class="s1">&#39;https://www.sylabs.io/&#39;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="n">whatis</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="s1">&#39;Description: Bindings to let singularity containers use the cray-mpich libraries on the system&#39;</span>    
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="p">]</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s2">Singularity is a portable application stack packaging and runtime utility.</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s2">This module provides the MPI support for singularity containers based</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s2">on MPICH versions which are ABI-compatible with cray-mpich.</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="s2">Singularity on LUMI is provided in the base OS images, so no module needs</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="s2">to be loaded to just use singularity. This module sets SINGULARTY_BIND and</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="s2">SINGULARITYENV_LD_LIBRARY_PATH to enable containers that use an MPICH </span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="s2">version that is ABI compatible with cray-mpich to use the cray-mpich</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="s2">libraries provided on LUMI for optimal performance on the interconnect</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="s2">of LUMI.</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="s2">&quot;&quot;&quot;</span>
 <a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cray-mpich-abi/</span><span class="si">{</span><span class="n">local_craympich_version</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">EXTERNAL_MODULE</span><span class="p">),</span>
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="p">]</span>
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="n">modextravars</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>    <span class="s1">&#39;SINGULARITYENV_LD_LIBRARY_PATH&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;/lib64:&#39;</span>
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>                                       <span class="s1">&#39;/opt/cray/pe/mpich/&#39;</span> <span class="o">+</span> <span class="n">local_craympich_version</span> <span class="o">+</span> <span class="s1">&#39;/ofi/gnu/&#39;</span> <span class="o">+</span> <span class="n">local_craympich_gnutoolchain</span> <span class="o">+</span> <span class="s1">&#39;/lib-abi-mpich:&#39;</span>
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>                                       <span class="s1">&#39;/opt/cray/libfabric/&#39;</span> <span class="o">+</span> <span class="n">local_libfabric_version</span> <span class="o">+</span> <span class="s1">&#39;/lib64:&#39;</span>
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>                                       <span class="s1">&#39;/opt/cray/pe/pmi/6.1.14/lib:&#39;</span>
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>                                       <span class="s1">&#39;/opt/cray/pals/1.3.2/lib:&#39;</span>
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>                                       <span class="s1">&#39;/usr/lib64&#39;</span><span class="p">),</span>
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>    <span class="s1">&#39;SINGULARITY_BIND&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;/opt/cray,&#39;</span>
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>                         <span class="s1">&#39;/var/spool,&#39;</span>
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>                         <span class="s1">&#39;/etc/host.conf,&#39;</span>
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>                         <span class="s1">&#39;/etc/hosts,&#39;</span>
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>                         <span class="s1">&#39;/etc/nsswitch.conf,&#39;</span>
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>                         <span class="s1">&#39;/etc/resolv.conf,&#39;</span>
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>                         <span class="s1">&#39;/etc/ssl/openssl.cnf,&#39;</span>
-<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>                         <span class="s1">&#39;/opt/rocm-6.0.3/lib/libhsa-runtime64.so,&#39;</span>
-<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>                         <span class="s1">&#39;/usr/lib64/libatomic.so.1,&#39;</span>
-<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>                         <span class="s1">&#39;/usr/lib64/libbrotlicommon.so.1,&#39;</span>
-<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>                         <span class="s1">&#39;/usr/lib64/libbrotlidec.so.1,&#39;</span>
-<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>                         <span class="s1">&#39;/usr/lib64/libcrypto.so.1.1,&#39;</span>
-<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>                         <span class="s1">&#39;/usr/lib64/libcurl.so.4,&#39;</span>
-<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>                         <span class="s1">&#39;/usr/lib64/libcxi.so.1,&#39;</span>
-<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>                         <span class="s1">&#39;/usr/lib64/libdrm_amdgpu.so.1,&#39;</span>
-<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>                         <span class="s1">&#39;/usr/lib64/libdrm.so.2,&#39;</span>
-<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>                         <span class="s1">&#39;/usr/lib64/libelf.so.1,&#39;</span>
-<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>                         <span class="s1">&#39;/opt/cray/pe/gcc-libs/libgcc_s.so.1:/usr/lib64/libgcc_s.so.1,&#39;</span>
-<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>                         <span class="s1">&#39;/opt/cray/pe/gcc-libs/libgfortran.so.5:/usr/lib64/libgfortran.so.5,&#39;</span>
-<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>                         <span class="s1">&#39;/usr/lib64/libgssapi_krb5.so.2,&#39;</span>
-<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>                         <span class="s1">&#39;/usr/lib64/libidn2.so.0,&#39;</span>
-<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>                         <span class="s1">&#39;/usr/lib64/libjansson.so.4,&#39;</span>
-<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>                         <span class="s1">&#39;/usr/lib64/libjitterentropy.so.3,&#39;</span>
-<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>                         <span class="s1">&#39;/usr/lib64/libjson-c.so.3,&#39;</span>
-<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>                         <span class="s1">&#39;/usr/lib64/libk5crypto.so.3,&#39;</span>
-<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>                         <span class="s1">&#39;/usr/lib64/libkeyutils.so.1,&#39;</span>
-<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>                         <span class="s1">&#39;/usr/lib64/libkrb5.so.3,&#39;</span>
-<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>                         <span class="s1">&#39;/usr/lib64/libkrb5support.so.0,&#39;</span>
-<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>                         <span class="s1">&#39;/usr/lib64/liblber-2.4.so.2,&#39;</span>
-<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>                         <span class="s1">&#39;/usr/lib64/libldap_r-2.4.so.2,&#39;</span>
-<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>                         <span class="s1">&#39;/usr/lib64/liblnetconfig.so.4,&#39;</span>
-<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>                         <span class="s1">&#39;/usr/lib64/liblustreapi.so,&#39;</span>
-<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>                         <span class="s1">&#39;/usr/lib64/libnghttp2.so.14,&#39;</span>
-<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>                         <span class="s1">&#39;/usr/lib64/libnl-3.so.200,&#39;</span>
-<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>                         <span class="s1">&#39;/usr/lib64/libnl-route-3.so.200,&#39;</span>
-<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>                         <span class="s1">&#39;/usr/lib64/libnuma.so.1,&#39;</span>
-<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>                         <span class="s1">&#39;/usr/lib64/libpcre.so.1,&#39;</span>
-<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>                         <span class="s1">&#39;/usr/lib64/libpsl.so.5,&#39;</span>
-<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>                         <span class="s1">&#39;/usr/lib64/libsasl2.so.3,&#39;</span>
-<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>                         <span class="s1">&#39;/usr/lib64/libssh.so.4,&#39;</span>
-<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>                         <span class="s1">&#39;/usr/lib64/libssl.so.1.1,&#39;</span>
-<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>                         <span class="s1">&#39;/opt/cray/pe/gcc-libs/libstdc++.so.6:/usr/lib64/libstdc++.so.6,&#39;</span>
-<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>                         <span class="s1">&#39;/usr/lib64/libunistring.so.2,&#39;</span> 
-<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>                         <span class="s1">&#39;/usr/lib64/libyaml-0.so.2,&#39;</span>
-<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>                         <span class="s1">&#39;/usr/lib64/libz.so.1,&#39;</span>
-<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>                         <span class="s1">&#39;/usr/lib64/libzstd.so.1,&#39;</span>
-<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>                         <span class="s1">&#39;/run/cxi&#39;</span><span class="p">)</span>
-<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a><span class="p">}</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="n">toolchain</span> <span class="o">=</span> <span class="n">SYSTEM</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cray-mpich-abi/</span><span class="si">{</span><span class="n">local_craympich_version</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">EXTERNAL_MODULE</span><span class="p">),</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="p">]</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="n">modextravars</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>    <span class="s1">&#39;SINGULARITYENV_LD_LIBRARY_PATH&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;/lib64:&#39;</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>                                       <span class="s1">&#39;/opt/cray/pe/mpich/&#39;</span> <span class="o">+</span> <span class="n">local_craympich_version</span> <span class="o">+</span> <span class="s1">&#39;/ofi/gnu/&#39;</span> <span class="o">+</span> <span class="n">local_craympich_gnutoolchain</span> <span class="o">+</span> <span class="s1">&#39;/lib-abi-mpich:&#39;</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>                                       <span class="s1">&#39;/opt/cray/libfabric/&#39;</span> <span class="o">+</span> <span class="n">local_libfabric_version</span> <span class="o">+</span> <span class="s1">&#39;/lib64:&#39;</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>                                       <span class="s1">&#39;/opt/cray/pe/pmi/6.1.14/lib:&#39;</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>                                       <span class="s1">&#39;/opt/cray/pals/1.3.2/lib:&#39;</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>                                       <span class="s1">&#39;/usr/lib64&#39;</span><span class="p">),</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>    <span class="s1">&#39;SINGULARITY_BIND&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;/opt/cray,&#39;</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>                         <span class="s1">&#39;/var/spool,&#39;</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>                         <span class="s1">&#39;/etc/host.conf,&#39;</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>                         <span class="s1">&#39;/etc/hosts,&#39;</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>                         <span class="s1">&#39;/etc/nsswitch.conf,&#39;</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>                         <span class="s1">&#39;/etc/resolv.conf,&#39;</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>                         <span class="s1">&#39;/etc/ssl/openssl.cnf,&#39;</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>                         <span class="s1">&#39;/opt/rocm-6.0.3/lib/libhsa-runtime64.so,&#39;</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>                         <span class="s1">&#39;/usr/lib64/libatomic.so.1,&#39;</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>                         <span class="s1">&#39;/usr/lib64/libbrotlicommon.so.1,&#39;</span>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>                         <span class="s1">&#39;/usr/lib64/libbrotlidec.so.1,&#39;</span>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>                         <span class="s1">&#39;/usr/lib64/libcrypto.so.1.1,&#39;</span>
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>                         <span class="s1">&#39;/usr/lib64/libcurl.so.4,&#39;</span>
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>                         <span class="s1">&#39;/usr/lib64/libcxi.so.1,&#39;</span>
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>                         <span class="s1">&#39;/usr/lib64/libdrm_amdgpu.so.1,&#39;</span>
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>                         <span class="s1">&#39;/usr/lib64/libdrm.so.2,&#39;</span>
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>                         <span class="s1">&#39;/usr/lib64/libelf.so.1,&#39;</span>
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>                         <span class="s1">&#39;/opt/cray/pe/gcc-libs/libgcc_s.so.1:/usr/lib64/libgcc_s.so.1,&#39;</span>
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>                         <span class="s1">&#39;/opt/cray/pe/gcc-libs/libgfortran.so.5:/usr/lib64/libgfortran.so.5,&#39;</span>
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>                         <span class="s1">&#39;/usr/lib64/libgssapi_krb5.so.2,&#39;</span>
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>                         <span class="s1">&#39;/usr/lib64/libidn2.so.0,&#39;</span>
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>                         <span class="s1">&#39;/usr/lib64/libjansson.so.4,&#39;</span>
+<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>                         <span class="s1">&#39;/usr/lib64/libjitterentropy.so.3,&#39;</span>
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>                         <span class="s1">&#39;/usr/lib64/libjson-c.so.3,&#39;</span>
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>                         <span class="s1">&#39;/usr/lib64/libk5crypto.so.3,&#39;</span>
+<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>                         <span class="s1">&#39;/usr/lib64/libkeyutils.so.1,&#39;</span>
+<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>                         <span class="s1">&#39;/usr/lib64/libkrb5.so.3,&#39;</span>
+<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>                         <span class="s1">&#39;/usr/lib64/libkrb5support.so.0,&#39;</span>
+<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>                         <span class="s1">&#39;/usr/lib64/liblber-2.4.so.2,&#39;</span>
+<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>                         <span class="s1">&#39;/usr/lib64/libldap_r-2.4.so.2,&#39;</span>
+<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>                         <span class="s1">&#39;/usr/lib64/liblnetconfig.so.4,&#39;</span>
+<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>                         <span class="s1">&#39;/usr/lib64/liblustreapi.so,&#39;</span>
+<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>                         <span class="s1">&#39;/usr/lib64/libnghttp2.so.14,&#39;</span>
+<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>                         <span class="s1">&#39;/usr/lib64/libnl-3.so.200,&#39;</span>
+<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>                         <span class="s1">&#39;/usr/lib64/libnl-route-3.so.200,&#39;</span>
+<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>                         <span class="s1">&#39;/usr/lib64/libnuma.so.1,&#39;</span>
+<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>                         <span class="s1">&#39;/usr/lib64/libpcre.so.1,&#39;</span>
+<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>                         <span class="s1">&#39;/usr/lib64/libpsl.so.5,&#39;</span>
+<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>                         <span class="s1">&#39;/usr/lib64/libsasl2.so.3,&#39;</span>
+<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>                         <span class="s1">&#39;/usr/lib64/libssh.so.4,&#39;</span>
+<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>                         <span class="s1">&#39;/usr/lib64/libssl.so.1.1,&#39;</span>
+<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>                         <span class="s1">&#39;/opt/cray/pe/gcc-libs/libstdc++.so.6:/usr/lib64/libstdc++.so.6,&#39;</span>
+<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>                         <span class="s1">&#39;/usr/lib64/libunistring.so.2,&#39;</span> 
+<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>                         <span class="s1">&#39;/usr/lib64/libyaml-0.so.2,&#39;</span>
+<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>                         <span class="s1">&#39;/usr/lib64/libz.so.1,&#39;</span>
+<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a>                         <span class="s1">&#39;/usr/lib64/libzstd.so.1,&#39;</span>
+<a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a>                         <span class="s1">&#39;/run/cxi&#39;</span><span class="p">)</span>
+<a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a><span class="p">}</span>
+<a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a>
+<a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a><span class="n">modluafooter</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a><span class="s2">family( &#39;containerbindings&#39; )</span>
+<a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a><span class="s2">conflict( &#39;singularity-bindings&#39; )</span>
+<a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a><span class="s2">conflict( &#39;singularity-CPEbits&#39; )</span>
+<a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a><span class="s2">conflict( &#39;singularity-userfilesystems&#39; )</span>
+<a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a>
+<a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a><span class="n">moduleclass</span> <span class="o">=</span> <span class="s1">&#39;tools&#39;</span>
 </code></pre></div>
 <p><a href="../">[singularity-bindings]</a> <a href="../../../">[package list]</a></p>
 

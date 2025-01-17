@@ -1,0 +1,24 @@
+---
+title:  for mpi4py/3.1.4-rocm-5.4.5-python-3.10-singularity-20240207 - mpi4py
+search:
+  exclude: true
+hide:
+- navigation
+- toc
+---
+
+[[mpi4py]](index.md) [[package list]](../../index.md)
+
+#  for mpi4py/3.1.4-rocm-5.4.5-python-3.10-singularity-20240207 (mpi4py-3.1.4-rocm-5.4.5-python-3.10-singularity-20240207.eb)
+
+Docker definition file ``
+for the container provided by the module `mpi4py/3.1.4-rocm-5.4.5-python-3.10-singularity-20240207`.
+
+Docker file:
+
+
+``` docker
+
+```
+
+[[mpi4py]](index.md) [[package list]](../../index.md)

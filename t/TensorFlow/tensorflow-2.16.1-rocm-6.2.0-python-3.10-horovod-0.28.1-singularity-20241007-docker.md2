@@ -1,0 +1,24 @@
+---
+title:  for TensorFlow/2.11.1-rocm-5.5.1-python-3.10-horovod-0.28.1-singularity-20240617 - TensorFlow
+search:
+  exclude: true
+hide:
+- navigation
+- toc
+---
+
+[[TensorFlow]](index.md) [[package list]](../../index.md)
+
+#  for TensorFlow/2.11.1-rocm-5.5.1-python-3.10-horovod-0.28.1-singularity-20240617 (TensorFlow-2.11.1-rocm-5.5.1-python-3.10-horovod-0.28.1-singularity-20240617.eb)
+
+Docker definition file ``
+for the container provided by the module `TensorFlow/2.11.1-rocm-5.5.1-python-3.10-horovod-0.28.1-singularity-20240617`.
+
+Docker file:
+
+
+``` docker
+
+```
+
+[[TensorFlow]](index.md) [[package list]](../../index.md)
