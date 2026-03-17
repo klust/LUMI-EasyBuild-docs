@@ -8,6 +8,20 @@ hide:
 
 # What's new in the LUMI software stack
 
+## Release 20260317
+
+-   Local-LAIF module that makes the LUMI AI Factory modules available.
+
+-   [VASP 6.6.0 for CPU](v/VASP/index.md) with dependencies
+    [mctc-lib](m/mctc-lib/index.md) and 
+    [DFTD4](d/DFTD4/index.md)
+
+-   [Neko 1.0.1](n/Neko/index.md). Note though that the performance of
+    the cpeCray version is currently not very good as `-O0` had to be
+    used for Fortran as one of the files introduced wrong results when
+    compiled with a higher level of optimisation.
+
+
 ## Release 20260312
 
 -   Some fixes in the LUMI Software Library that didn't make it in the
