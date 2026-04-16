@@ -8,6 +8,21 @@ hide:
 
 # What's new in the LUMI software stack
 
+## Release 20260416
+
+-   Updated message-of-the-day
+
+-   Added the `lstopo` command to the [systools](s/systools/index.md) module so that the
+    experiments in the notes of the bindings talk of the intro course
+    can again work (update follows at the course on April 22).
+
+-   New version of [lumi-training-tools](l/lumi-training-tools/index.md)
+    for the intro course on April 22.
+
+-   Removing some older recipes that don't work properly anymore after
+    the January 2026 system update.
+
+
 ## Release 20260317
 
 -   Local-LAIF module that makes the LUMI AI Factory modules available.
