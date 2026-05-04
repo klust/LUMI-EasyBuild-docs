@@ -8,6 +8,16 @@ hide:
 
 # What's new in the LUMI software stack
 
+## Release 20260504
+
+-   Update to the documentation of [QuantumESPRESSO](q/QuantumESPRESSO/index.md)
+    based on experience gained from a ticket.
+
+-   Corrected a typo in the modulefiles of [buildtools](b/buildtools/index.md).
+
+-   A minor improvement to the EasyConfig for [Celerity 0.7.0](c/Celerity/index.md).
+
+
 ## Release 20260416
 
 -   Updated message-of-the-day
