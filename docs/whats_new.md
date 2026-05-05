@@ -8,6 +8,15 @@ hide:
 
 # What's new in the LUMI software stack
 
+## Release 20260505
+
+-   Security fix of `rclone` via new [lumio-ext-tools/1.1.0](l/lumio-ext-tools/index.md)
+    module, now also automatically loaded by the [`lumio`module](l/lumio/index.md).
+
+    The former `lumio-ext-tools/1.0.0` module will be removed at the next software stack
+    update.
+
+
 ## Release 20260504
 
 -   Update to the documentation of [QuantumESPRESSO](q/QuantumESPRESSO/index.md)
